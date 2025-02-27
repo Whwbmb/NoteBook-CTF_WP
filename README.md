@@ -108,7 +108,7 @@ https://forensics.didctf.com/challenges#welog1-703
 ```
 这个是典型的一句话木马，攻击者可以通过`3b90d75de248ce55b66e8e30873b6000`进行连接，即为本题的答案
 
-## [陇剑杯 2021]SQL注入
+<!-- ## [陇剑杯 2021]SQL注入
 
 https://www.nssctf.cn/problem/295
 
@@ -143,7 +143,7 @@ https://www.nssctf.cn/problem/6
 
 ## [CISCN 2023 华北]pysym 
 
-https://www.nssctf.cn/problem/4098
+https://www.nssctf.cn/problem/4098 -->
 
 ## [GDOUCTF 2023]受不了一点 
 
@@ -165,14 +165,14 @@ if(isset($_POST['gdou'])&&isset($_POST['ctf'])){
     $b=$_POST['ctf'];
     $a=$_POST['gdou'];
 ```
-- 检查 POST 请求是否包含 `gdou` 和 `ctf` 两个字段并将这两个字段分别赋值给 `$a` 和 `$b`。
+检查 POST 请求是否包含 `gdou` 和 `ctf` 两个字段并将这两个字段分别赋值给 `$a` 和 `$b`。
 
 **在满足了上述代码的`if`条件后，即存在需要的那两个字段才能继续下面的部分，所以需要我们去在`POST`包中添加两个指定的字段名称**
 
 ```php
 if($_POST['gdou']!=$_POST['ctf'] && md5($a)===md5($b)){
 ```
-- 代码首先检查 `gdou` 和 `ctf` 是否相等（`$_POST['gdou']!=$_POST['ctf']`）以及两个字段的 MD5 哈希值是否相同,如果它们的字段值不同并且哈希值相同，则允许继续执行下面的内容。
+代码首先检查 `gdou` 和 `ctf` 是否相等（`$_POST['gdou']!=$_POST['ctf']`）以及两个字段的 MD5 哈希值是否相同,如果它们的字段值不同并且哈希值相同，则允许继续执行下面的内容。
   
 **这里用到的是md5绕过，PHP 中的`md5()`函数允许你使用数组作为该函数的参数，`md5()` 函数对于任何数组都将返回`NULL`,所以，可以构建`gdou[]=1&ctf[]=2`**
 
@@ -180,7 +180,7 @@ if($_POST['gdou']!=$_POST['ctf'] && md5($a)===md5($b)){
 if(isset($_COOKIE['cookie'])){
    if ($_COOKIE['cookie']=='j0k3r'){
 ```
-- 代码检查是否有名为 `cookie` 的 Cookie，并且其值为 `'j0k3r'`满足条件则进入下一个代码块则继续执行。
+代码检查是否有名为 `cookie` 的 Cookie，并且其值为 `'j0k3r'`满足条件则进入下一个代码块则继续执行。
 
 **在POST包中添加`Cookie：cookie=j0k3r`即可。**
 
@@ -189,7 +189,7 @@ if(isset($_GET['aaa']) && isset($_GET['bbb'])){
     $aaa=$_GET['aaa'];
     $bbb=$_GET['bbb'];
 ```
-- 检查 URL 参数中是否包含 `aaa` 和 `bbb`,如果都有则继续.
+检查 URL 参数中是否包含 `aaa` 和 `bbb`,如果都有则继续.
   
 **所以我们要在`url`即`header`部分添加`/?aaa&bbb`的部分，其具体的值下面会给出。**
 
@@ -198,14 +198,14 @@ if($aaa==114514 && $bbb==114514 && $aaa!=$bbb){
     $give = 'cancanwordflag';
     $get ='hacker!';
 ```
-- 如果 `aaa` 和 `bbb` 的值都为 `114514`，并且 `aaa` 不等于 `bbb`那么设置两个变量 `$give` 和 `$get`，分别为 `'cancanwordflag'` 和 `'hacker!'`。
+如果 `aaa` 和 `bbb` 的值都为 `114514`，并且 `aaa` 不等于 `bbb`那么设置两个变量 `$give` 和 `$get`，分别为 `'cancanwordflag'` 和 `'hacker!'`。
   
 **这里用到了php代码中弱比较`==`的特点，因此可以构造`/?aaa=114514&bbb=114514a`来满足要求**
 
 ```php
 echo $flag;
 ```
-- 最后，如果代码成功运行到了这里，则输出 `$flag` 变量的值。
+最后，如果代码成功运行到了这里，则输出 `$flag` 变量的值。
   
 **整体来看，其实是套了5层`if`语句的闯关游戏，全部按要求完成即可。**
 
