@@ -1,5 +1,6 @@
 # CTF WP-WEB
 
+---
 
 ## [ACTF2020 新生赛]Exec
 
@@ -37,6 +38,8 @@
 
 如果前面为假，后面的命令就不执行，如果前面为真则再执行后面命令，这样两条命令都会被执行
 
+---
+
 ## [GXYCTF2019]Ping Ping Ping
 
 ### 题解：
@@ -47,7 +50,9 @@
 
 使用到了命令绕过、内联执行等技术，参考题解中的ab变量使用进行绕过字符匹配或使用base64编码绕过明文匹配
 
-## **[强网杯 2019]随便注**
+---
+
+## [强网杯 2019]随便注
 
 ### 题解：
 
@@ -79,7 +84,9 @@ ALTER TABLE words CHANGE flag data VARCHAR(100);-- q
 
 对于纯数字或是不符合命名标准的表名要加上``进行区分
 
-## **[极客大挑战 2019]LoveSQL**
+---
+
+## [极客大挑战 2019]LoveSQL
 
 ### 题解：
 
@@ -123,7 +130,9 @@ username=admin' order by 4%23&password=1通过盲注可知没有第四列，即�
 
 ![](http://www.kdocs.cn/api/v3/office/copy/VzkxQnVnVEtpT2xjdnI4eWVKMTRoQVlFVEFuY3Flc1ppUXVZSkpsUXlRKys5VHFqeWVWdG5kdGZpRzBjdXZCQWpXZk1EYU9qbVd2MWMzeUt5SzF1ampXN3NvdzdRdXdLRFhjKzBHdEtHaGFIdTVhY0x5ak8vZlBnTUhWaE91WDErNjVDaTdKcW4rUnpBMjNrdkl4bmYrL3AyZllEUmJRdGxGdXV6K0JqcjVtQUhTQTBCdEpRbUR3SE5JL3Y4Y2J3NHhYMkcwK0htSCs2cGQvUzdWMDh5N2E4M0VUbGlVYXMvUEptTVNUTUUvY1ZCa1FjYi9mZzIvT3E3Nkw2N0dYVG92SVpHWFUvVm1vPQ==/attach/object/V5XPVRQ4ABACK?)
 
-## **[极客大挑战 2019]Secret File**
+---
+
+## [极客大挑战 2019]Secret File
 
 ### 题解：
 
@@ -147,7 +156,9 @@ username=admin' order by 4%23&password=1通过盲注可知没有第四列，即�
 
 ![](http://www.kdocs.cn/api/v3/office/copy/VzkxQnVnVEtpT2xjdnI4eWVKMTRoQVlFVEFuY3Flc1ppUXVZSkpsUXlRKys5VHFqeWVWdG5kdGZpRzBjdXZCQWpXZk1EYU9qbVd2MWMzeUt5SzF1ampXN3NvdzdRdXdLRFhjKzBHdEtHaGFIdTVhY0x5ak8vZlBnTUhWaE91WDErNjVDaTdKcW4rUnpBMjNrdkl4bmYrL3AyZllEUmJRdGxGdXV6K0JqcjVtQUhTQTBCdEpRbUR3SE5JL3Y4Y2J3NHhYMkcwK0htSCs2cGQvUzdWMDh5N2E4M0VUbGlVYXMvUEptTVNUTUUvY1ZCa1FjYi9mZzIvT3E3Nkw2N0dYVG92SVpHWFUvVm1vPQ==/attach/object/EQVQXRY4ABQDI?)
 
-## **[MRCTF2020]你传你****🐎****呢**
+---
+
+## [MRCTF2020]你传你****🐎****呢
 
 ### 题解：
 
@@ -157,7 +168,9 @@ username=admin' order by 4%23&password=1通过盲注可知没有第四列，即�
 
 通过蚁剑进行连接，在目录中找到flag
 
-## **[极客大挑战 2019]Upload**
+---
+
+## [极客大挑战 2019]Upload
 
 ### 题解：
 
@@ -171,7 +184,7 @@ GIF89a  //习惯在文件前加上GIF89a来绕过PHP getimagesize的检查，这
 
 使用蚁剑连接，在根目录下找到flag
 
-
+---
 
 ## [MoeCTF 2022]Sqlmap_boy
 
@@ -188,7 +201,9 @@ sqlmap的-dump很好用，同时对于登录后的sql注入需要注意使用sql
 https://blog.csdn.net/qq_45719090/article/details/129241110
 https://octobug.gitbooks.io/sqlmap-wiki-zhcn/content/
 
-## [HDCTF 2023]LoginMaster
+---
+
+<!-- ## [HDCTF 2023]LoginMaster
 
 https://www.nssctf.cn/problem/3782
 
@@ -196,7 +211,7 @@ https://www.nssctf.cn/problem/3782
 * 工具：burpsuit
 
 - [ ] 完全理解
-
+---
 ## [第五空间 2021]yet_another_mysql_injection
 
 https://www.nssctf.cn/problem/334
@@ -205,6 +220,7 @@ https://www.nssctf.cn/problem/334
 * 工具：burpsuit
 
 - [ ] 完全理解
+--- -->
 
 ## [LitCTF 2024]一个....池子？
 
@@ -218,6 +234,8 @@ https://www.nssctf.cn/problem/5606
 使用工具 `fenjing`，直接对可绕过链接进行操作，绕过成功后即可进行过命令操控
 
 fenjing工具：https://github.com/Marven11/FenJing
+
+---
 
 ## [GDOUCTF 2023]受不了一点
 
@@ -359,3 +377,60 @@ PHP 在进行字符串和数字比较时，会尝试将字符串转换为数字�
 '1' == true       // true，因为字符串 '1' 被转换为数字 1，而 true 也转换为 1
 '0' == false      // true，因为字符串 '0' 被转换为数字 0，而 false 也转换为 0
 ```
+
+---
+
+## [NISACTF 2022]midlevel
+
+https://www.nssctf.cn/problem/3727
+
+* 考点：SSTI, Smarty, PHP
+* 工具：yakit
+
+本题考查SSTI模板注入，进入开启的容器后，发现是一个获取自身IP的API，页面如下：
+
+![1740652072380](image/README/1740652072380.jpg)
+
+由最下方的信息可知这里使用`Smarty`模板引擎，通过给出的AIP地址，发现无法访问，但是在这个页面中，右上角又显示出了我们电脑的IP地址
+
+可以猜测用到的是 `XFF`，在 `Yakit`中进行测试，修改XFF标签的内容
+
+![1740653662391](image/README/1740653662391.jpg)
+
+发生了下面的结果变动
+
+![1740653665480](image/README/1740653665480.jpg)
+
+进一步确认的之前的猜想，这里存在`SSTI`，接下来猜测应该需要通过这个漏洞去执行 `shell`命令，获取系统中的flag文件
+
+在PHP中，直接执行 `shell`命令可以使用下面的代码结构：
+
+```php
+system('cmd')
+```
+
+据此替换XFF的值为
+
+```php
+{system('cat /flag')}#一般默认flag在根路径下
+```
+
+![1740654312655](image/README/1740654312655.jpg)
+
+即得到了 `flag`
+
+![1740654251349](image/README/1740654251349.jpg)
+
+还有一种方法利用的是`Smarty`的`{if}`标签，`{if}`标签可以在里面执行`php`代码，所以也可以将`XFF`的内容替换为下面的：
+
+```php
+{if system('cat /flag')}{/if}
+```
+
+更详细的SSTI内容见下面的博客：
+
+[PHP的模板注入（Smarty模板）_smarty模板注入-CSDN博客](https://blog.csdn.net/qq_45521281/article/details/107556915)
+
+[1. SSTI（模板注入）漏洞（入门篇） - bmjoker - 博客园](https://www.cnblogs.com/bmjoker/p/13508538.html)
+
+---
