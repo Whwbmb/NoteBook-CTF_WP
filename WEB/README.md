@@ -248,7 +248,7 @@ https://www.nssctf.cn/problem/3727
 
 题目直接给出了一个php代码，代码如下：
 
-![1739376822024](../image/README/1739376822024.jpg)
+![1739376822024](img/受不了一点php代码.jpg)
 
 审计 `php`代码可以知道，这个代码是通过多个 `if`语句进行条件判断来隐藏flag信息，只要一层层按照 `if`的要求完成即可
 
@@ -311,7 +311,7 @@ echo $flag;
 
 最后得到的如下的 `POST`包:
 
-![1739379453205](../image/README/1739379453205.jpg)
+![1739379453205](img/受不了一点POST包.jpg)
 
 这里还要注意一个细节，由于我们使用的是POST请求，所以需要指定 `Content-Type: application/x-www-form-urlencoded`,表单字段的名称和值会以 `key=value`的形式组成字符串，多个字段之间通过 `&`符号连接，且特殊字符会被 `URL`编码，这样 `$_POST['gdou']`才能读取到.
 
@@ -389,17 +389,17 @@ https://www.nssctf.cn/problem/3727
 
 本题考查SSTI模板注入，进入开启的容器后，发现是一个获取自身IP的API，页面如下：
 
-![1740652072380](image/README/1740652072380.jpg)
+![1740652072380](img/middlevel原始页面.jpg)
 
 由最下方的信息可知这里使用`Smarty`模板引擎，通过给出的AIP地址，发现无法访问，但是在这个页面中，右上角又显示出了我们电脑的IP地址
 
 可以猜测用到的是 `XFF`，在 `Yakit`中进行测试，修改XFF标签的内容
 
-![1740653662391](image/README/1740653662391.jpg)
+![1740653662391](img/middlevel修改xff.jpg)
 
 发生了下面的结果变动
 
-![1740653665480](image/README/1740653665480.jpg)
+![1740653665480](img/middlevel可行性测试.jpg)
 
 进一步确认的之前的猜想，这里存在`SSTI`，接下来猜测应该需要通过这个漏洞去执行 `shell`命令，获取系统中的flag文件
 
@@ -415,11 +415,11 @@ system('cmd')
 {system('cat /flag')}#一般默认flag在根路径下
 ```
 
-![1740654312655](image/README/1740654312655.jpg)
+![1740654312655](img/根路径查找flag.jpg)
 
 即得到了 `flag`
 
-![1740654251349](image/README/1740654251349.jpg)
+![1740654251349](image/README/midlevel得到flag.jpg)
 
 还有一种方法利用的是`Smarty`的`{if}`标签，`{if}`标签可以在里面执行`php`代码，所以也可以将`XFF`的内容替换为下面的：
 
@@ -432,5 +432,34 @@ system('cmd')
 [PHP的模板注入（Smarty模板）_smarty模板注入-CSDN博客](https://blog.csdn.net/qq_45521281/article/details/107556915)
 
 [1. SSTI（模板注入）漏洞（入门篇） - bmjoker - 博客园](https://www.cnblogs.com/bmjoker/p/13508538.html)
+
+---
+
+## [GWCTF 2019]你的名字
+
+https://www.nssctf.cn/problem/259
+
+* 考点：SSTI,Flask,Jinja2
+* 工具：
+
+进入容器网页后通过浏览器的F12可一发现使用的请求方式为`POST`，并且字段名称为`name`，由此，可以使用`fenjing`去直接进行绕过wap，执行指令找到flag
+
+一开始执行
+```bash
+cat /flag
+```
+发现没有结果，猜测flag应该不在根目录，于是`ls`查看根目录情况:
+```bash
+ls /
+```
+
+![](./image/fenjing1.png)
+
+发现一个`flag_1s_Hrea`的文件，打开查看后是告诉我们flag在环境变量中，于是继续执行下面的命令得到flag
+
+```bash
+printenv
+```
+![](./image/fenjing2.png)
 
 ---
