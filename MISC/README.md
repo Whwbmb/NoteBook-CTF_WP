@@ -105,3 +105,85 @@ decode_base64_loop(input_str)
 得到flag
 
 ---
+
+## [SWPU 2019]神奇的二维码 
+
+* 考点：图片隐写，音频隐写，摩斯电码
+* 工具：010editor,audicity,base64,binwalk,foremost
+
+https://www.nssctf.cn/problem/39
+
+不难，但很烦，套娃严重
+
+首先题目给出的是一张二维码图片，扫码会发现没有意义
+
+这个时候就可以想到图像隐写相关的考点
+
+纪律性检查lsb隐写、文件详情信息等都没发现异常，放入`010editor`查看编码后发现在末尾出现了good.mp3的字样，基本可以确定是文件隐藏
+
+![](./img/misc3.6musicmp3.png)
+
+使用`binwalk`和`foremost`进行检查和提取
+```bash
+binwalk 图片名称.png
+foreost 图片名称.png -o 目标文件夹
+# 或者 sudo binwalk -e MISC-神奇的二维码-BitcoinPay.png --run-as=root
+```
+
+![](./img/misc3.6隐藏.png)
+
+得到一个包含了压缩文件和doc、txt文件的文件夹,对doc和txt中的`base64`码进行解码，可以得到两个密码，这两个密码可以分别用于解密其他的rar压缩包
+
+![](./img/misc3.6base64解密.png)
+
+doc中的`base64`是多次解码
+![](./img/misc3.6base64解密2.png)
+
+解压缩后可以得到一个mp3文件，就是之前在`010editor`中看到的那个
+
+![](./img/misc3.6music.png)
+
+很容易猜到是摩斯电码，查看音轨图记录即可
+
+![](./img/misc3.6music电码.png)
+
+翻译得到答案，但是这题提交发现错误，将字符全部小写后提交正确（好像做过类似的题）
+
+![](./img/misc3.6music电码解密.png)
+
+---
+
+## [SWPU 2020]耗子尾汁
+
+https://www.nssctf.cn/problem/50
+
+* 考点：图片隐写，视频隐写，密码学
+* 工具：010editor,视频查看工具,base64,binwalk,foremost，Affine（仿射密码）
+
+和前面的题很像，都是从一个文件入手，分析发现含有隐藏的文件，所以这个WP只记录新的内容
+
+当解密得到两个压缩包时，例行解密，得到一个没用的文本和一个视频`mp4`文件，播放视频发现其中有一帧出现了文字内容
+
+![](./img/视频帧提取.png)
+
+`base64`解密后得到文本`sign_in`,怀疑是后面的某个密码
+
+到这里已经没有线索了，所以再次用`010editor`分析文件，发现视频文件中华还有一个压缩文件，继续分离后得到一个`zip`压缩文件，尝试后发先其解压密码恰为之前得到的文本，解压后得到一个新的`txt`文件,内容如下：
+```
+R1pCVE9OUlhHVTNES05SWkdZWVRNUVJYSEEzVEtOUlVHNFpUT09KWEdFM0RLTlJZRzRaVE9RSlhHRTNEUU5aWkdaQkRNTlpXRzQzVEdOWlpHNDRUTVFaV0lJM1RNTlpXR1k0UT09PT0=
+
+//The last layer is the single table replacement password
+```
+可以确定和多层编码与密码学相关
+
+尝试后得出结论经过了下面的三次编码：（这里使用了工具的自动爆破，如果根据与字符串特征应该也能辨认出编码类型）
+
+![](./img/三层编码提取.png)
+
+对最后的字符串进行单表密码替换,这里的是仿射密码
+
+![](./img/破解仿射密码.png)
+
+最后的flag构建需要用`_`分词
+
+--- 
