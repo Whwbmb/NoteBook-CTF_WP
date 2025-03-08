@@ -27,3 +27,68 @@ b7UkM iK2L0 PUVnZ Ho79I tDAf0 PUvfQ G5jHo 7GwLG wL9It vfQHo 7G5j0 PUvfQ 9Ithd Jk
 
 
 ---
+
+## [NSSCTF 2022 Spring Recruit]classic
+
+https://www.nssctf.cn/problem/2077
+
+* 考点：凯撒密码，base32解码
+* 工具：base32，toolsfx
+
+打开附件发现是一个关于古典密码学加密的文本（文件名提示），再加上文本的格式和flag的格式相似，联想到"NSSCTF"中有两个重复字母和这里的密文一致，所以基本可以确定是凯撒密码，解密后得到下面的结果：
+
+![](./img/classic_凯撒密码.png)
+
+由得到的内容可知还需要去尝试进行base解码，这里直接爆破，是base32解码，得到flag
+
+![](./img/classic_base32解码.png)
+
+---
+
+## [SWPUCTF 2021 新生赛]ez_rsa
+
+https://www.nssctf.cn/problem/431
+  
+* 考点：rsa加密，md5加密
+* 工具：python，toolsfx
+
+附件中同样是一个文本，指明了flag的内容，根据信息可以写出下面的代码求解:
+```bash
+from sympy import mod_inverse
+
+def compute_rsa_private_key(p, q, e):
+    """
+    计算 RSA 私钥指数 d
+    :param p: 素数 p
+    :param q: 素数 q
+    :param e: 公钥指数 e
+    :return: 私钥指数 d, 以及计算过程中涉及的中间变量
+    """
+    # 计算 N
+    N = p * q
+    print(f"模数 N = {N}")
+    
+    # 计算欧拉函数 φ(N)
+    phi = (p - 1) * (q - 1)
+    print(f"欧拉函数 φ(N) = {phi}")
+    
+    # 计算 d（e 关于 φ(N) 的模逆元）
+    d = mod_inverse(e, phi)
+    print(f"私钥指数 d = {d}")
+    
+    return N, phi, d
+
+# 给定 RSA 参数
+p = 1325465431
+q = 152317153
+e = 65537
+
+# 计算 RSA 私钥
+N, phi, d = compute_rsa_private_key(p, q, e)
+```
+
+即求出了`d`的值，然后`md5`加密即可
+
+![](./img/rsa_md5.png)
+
+---

