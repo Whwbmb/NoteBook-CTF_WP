@@ -187,3 +187,21 @@ R1pCVE9OUlhHVTNES05SWkdZWVRNUVJYSEEzVEtOUlVHNFpUT09KWEdFM0RLTlJZRzRaVE9RSlhHRTNE
 最后的flag构建需要用`_`分词
 
 --- 
+
+## [SWPUCTF 2021 新生赛]zipbomb
+
+* 考点 压缩包分析，文件提取
+* 工具：binwalk，foremost
+
+和之前的文件提取题一样，通过编码查看软件可以发现异端,如下图中发现在压缩包文件的中间部分又出现了一个压缩包的格式，说明这个压缩包文件中至少有两个文件
+
+![](./img/zip发现融合文件.png)
+
+进行提取，和之前的步骤一样，可以得到两个子压缩包，其中一个会占据巨大空间，另外一个只有1.8kb，打开即可看到文本中的flag:
+
+![](./img/zipflag.png)
+
+---
+
+
+
