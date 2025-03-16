@@ -203,5 +203,20 @@ R1pCVE9OUlhHVTNES05SWkdZWVRNUVJYSEEzVEtOUlVHNFpUT09KWEdFM0RLTlJZRzRaVE9RSlhHRTNE
 
 ---
 
+##  [EIS 2019]misc3
 
+* 考点：零字符加密，二进制转换
+* 工具：cyberchef，toolsfx
 
+直接对附件中的html文件查看，什么都没有发现，但考虑到这是一个misc题目，猜测会不会有零字符在其中，于是将其放入cyberchef中查看：
+
+![](./img/misc3零字符.png\)
+
+发现确实有零字符在其中，而且经过统计，发现只有两种不同的零字符，于是考虑是不是和二进制相关：
+![](./img/misc3零字符提取二进制.png)
+
+![](./img/misc3零字符得到flag.png)
+
+确实得到了flag，证明之前的猜测正确
+
+---
