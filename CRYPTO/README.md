@@ -92,3 +92,31 @@ N, phi, d = compute_rsa_private_key(p, q, e)
 ![](./img/rsa_md5.png)
 
 ---
+
+常用函数解释：
+
+下面给出一个总结，列举了 CTF 中常见的与密码学相关的函数和工具，这些函数往往构成了题目中加密、编码和混淆过程的基础模块：
+
+1. **模幂运算和模逆运算函数**  
+   - **pow(base, exp, mod)**：在 Python 中，经常用来实现 RSA 加密中的模幂运算，即计算 base^exp mod mod。  
+   - **inverse(a, m)**：用于求解模逆运算，是 RSA 私钥生成中不可缺少的函数。
+
+2. **大数生成与素数检测函数**  
+   - **getPrime(bits)**：生成指定位数的素数，常用于 RSA、DH 等算法。  
+   - **isPrime(n)**、**GCD(a, b)**：用来检测素数、计算最大公约数，为密钥生成和分解质因数等问题提供支持。
+
+3. **填充（Padding）函数**  
+   - **pad(data, block_size)** 与 **unpad(data, block_size)**：用于对明文数据进行填充，确保数据长度满足加密算法（如 AES、RSA 等）的要求（例如 PKCS#7 填充）。
+
+4. **异或（XOR）操作函数**
+
+   - **XOR**加密/解密：使用异或运算进行数据混淆。
+5. **将字节串转换回整数**
+   - bytes_to_long(FLAG)
+
+6. **将整数转换回字节串**
+   - long_to_bytes(FLAG_int)
+
+
+
+**中国剩余定理**：
