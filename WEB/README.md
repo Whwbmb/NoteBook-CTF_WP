@@ -763,6 +763,8 @@ echo urlencode(~$b);
 
 ## [NSSCTF 2022 Spring Recruit]ezgame
 
+https://www.nssctf.cn/problem/2074
+
 * 考点：js分析，源码泄露，信息收集
 * 工具：浏览器
   通过检查网页源码可以发现，提示我们通过获取分数超过 65 来得到 flag ，于是想到通过嵌入 js 代码实现。
@@ -773,6 +775,8 @@ echo urlencode(~$b);
 ---
 
 ## [AFCTF 2021]BABY_CSP
+
+https://www.nssctf.cn/problem/1409
 
 * 考点： XSS,CSP,反射型XSS
 * 工具：浏览器
@@ -790,7 +794,12 @@ CSP 相关：
 
 [使用CSP防止XSS攻击 - 汕大小吴 - 博客园](https://www.cnblogs.com/wuguanglin/p/XSS.html)
 
+常用 XSS payload:
+```
+onclick、onerror、alert
+```
 ---
+
 
 
 
