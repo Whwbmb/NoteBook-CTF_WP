@@ -385,5 +385,28 @@ https://www.nssctf.cn/problem/36
 ---
 
 
-## sqli-labs靶场
+## [SWPUCTF 2021 新生赛]我flag呢？
+
+https://www.nssctf.cn/problem/447
+
+* 考点：字频分析
+* 工具：python
+
+根据提供的 txt 文件的内容编写代码对每一个假 flag 进行处理，匹配每一个 {} 中的 flag 的内容进行字频的统计
+
+```python
+from collections import Counter
+f = open('1.txt','r') # 路径
+str=f.read()
+str1=''
+for i in range(len(str)):
+    if str[i]=="{":
+        str1+=str[i+1:i+17].lower()
+cla=Counter(str1)
+flag=cla.most_common()
+print(flag)
+for i in range(len(flag)):
+    print((flag[i][0]),end='')
+f.close() 
+```
 
