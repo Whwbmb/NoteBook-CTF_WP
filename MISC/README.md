@@ -410,3 +410,22 @@ for i in range(len(flag)):
 f.close() 
 ```
 
+字频统计后排序的结果显示是一个可读的内容，显示 flag ，但是 flag 并包含最后的一个字符，那个字符的频数为 1
+---
+## 内存取证相关：
+
+VOL常用命令：
+
+|命令|功能|
+|:----:|:---:|
+cmdline/cmdscan	|列出历史cmd命令
+filescan	|扫描文件，可配合grep使用
+netscan	|扫描建立的连接和套接字，类似于netstat
+pslist/psscan	|列出进程列表
+svcscan	|扫描windows服务列表
+screenshot	|显示GDI样式的截屏
+memdump	|从内存dump进程的内存
+dumpfiles	|从内存dump文件
+
+
+
