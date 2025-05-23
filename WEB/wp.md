@@ -1325,4 +1325,37 @@ echo $result;
 <user><username>&admin;</username></user>
 ```
 
+## [安洵杯 2020]BASH
+
+* 考点：无回显RCE，php审计，waf绕过
+* 工具：hackbar
+  
+通过对代码的审计可以发现只允许他通过白名单中的字符，所以需要通过白名单中的字符去构造paylaod
+```php
+<?php
+highlight_file(__FILE__);
+if(isset($_POST["cmd"]))
+{
+    $test = $_POST['cmd'];
+    $white_list = str_split('${#}\\(<)\'0'); 
+    $char_list = str_split($test);
+    foreach($char_list as $c){
+        if(!in_array($c,$white_list)){
+                die("Cyzcc");
+            }
+        }
+    exec($test);
+}
+?>
+```
+通过下面的网站可以构建终端命令的其他形式:
+
+[bashFuck](https://probiusofficial.github.io/bashFuck/)
+
+![](./img/无回显rce1.png)
+
+由于网页源码中没有输出命令执行结果的相应php，所以还需要把命令执行结果写入文件，然后通过url读取文件内容即可得到flag
+
+![](./img/无回显rce2.png)
+
 ---
