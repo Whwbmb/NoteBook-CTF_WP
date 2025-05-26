@@ -147,6 +147,8 @@ int main(){
 // 	}
 // 	for(int i = 0; i < N_B; i++)
 // 	{
+
+
 // 		cin >> circle_B[i];
 // 	}
 	
