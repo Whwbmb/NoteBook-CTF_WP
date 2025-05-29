@@ -115,3 +115,22 @@ for i in range(len(b)):
 ```
 
 最后得到flag
+
+## [BJDCTF 2020]Easy
+* 考点：动态调试
+* 工具：ida
+
+https://www.nssctf.cn/problem/702
+
+一道重定向返回地址执行其他函数的reverse
+通过ida反编译后可以看到main函数中没有有用的信息，再加上提示的"can you find me？",合理推测切入点在另外的一个函数中，找到这个`_ques`的函数,发现貌似是一个加解密的函数，但是没有被主函数调用，所以可以修改eip的值跳转到这个函数去执行
+
+![](./img/easy1.png)
+
+于是在call的前面打断点，修改eip的值为之前那个函数的起始地址，继续执行程序后发现打印出了flag
+
+![](./img/easy2.png)
+
+总体来看这反而像一道没有输入的pwn题，有点像ret2txt去调用其他的函数
+
+---
