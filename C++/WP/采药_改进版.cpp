@@ -5,11 +5,10 @@ using namespace std;
 
 int main(){
 	int T,M;
-	int numt[101],numv[101];
-	int dp[101]; 
+	int numt[1001],numv[101];
+	int dp[1001]; 
 	 
-	memset(dp,-1,sizeof(dp)); 
-	dp[0]=0;
+	memset(dp,0,sizeof(dp)); 
 	cin>>T>>M;
 	for(int i=1;i<=M;i++)cin>>numt[i]>>numv[i];
 	for(int i=1;i<=M;i++){
