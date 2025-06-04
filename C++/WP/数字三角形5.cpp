@@ -4,8 +4,8 @@
 using namespace std;
 
 int n;
-int dp[101][101];
-int num[101][101];
+int dp[1001][1001];
+int num[1001][1001];
 
 int dfs(int i,int j){
 	if(i<0||i>n-1||j<0||j>i)return 0;
