@@ -1359,3 +1359,34 @@ if(isset($_POST["cmd"]))
 ![](./img/无回显rce2.png)
 
 ---
+
+## [WUSTCTF 2020]CV Maker
+
+https://www.nssctf.cn/problem/1994
+
+* 考点：文件上传
+* 工具：yakit，蚁剑
+
+随便注册一个账号登录后发现可以上传头像，猜测可能有一个uploads目录，通过url尝试访问确实存在，可以直接查看其中的文件，再加上主页的文件名为php后缀，可以猜测能够执行php的文件，所以就要上传一个php木马到服务器上，获得webshell
+
+如果直接上传php文件，会显示有waf保护，但是上传图片文件却可以，所以可以将一个php木马伪造成图片格式：
+
+![](./img/CVmake-2.png)
+
+查看uploads目录下文件，根据时间发现刚刚上传的文件，已经被重命名了：
+
+![](./img/CVmake-1.png)
+
+通过蚁剑连接：
+
+![](./img/CVmake-3.png)
+
+发现网页根目录下就有一个phpinfo文件，访问后搜索flag可以直接找到环境变量中的flag
+
+![](./img/CVmake-4.png)
+
+也可以直接用shell找flag，根目录下有一个readflag，但是由于用户权限为www-data，所以无法访问执行，但是通过`env`查看环境变量也能够发现flag
+
+![](./img/CVmake-5.png)
+
+---
