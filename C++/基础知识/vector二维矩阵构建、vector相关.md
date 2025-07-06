@@ -51,3 +51,22 @@ for (auto &row : mat) {
 
 
 ```
+
+**如果想要返回一个空的vector：**
+```cpp
+std::vector<int> f() {
+    // 方法 1：显式构造
+    return std::vector<int>();        // 空 vector
+}
+
+std::vector<int> g() {
+    // 方法 2：列表初始化（C++11 起最简洁）
+    return {};                        // 同样返回空 vector
+}
+
+std::vector<int> h() {
+    // 方法 3：先声明空容器，再返回
+    std::vector<int> ans;             // 默认构造就是空
+    return ans;                       // Move Return Value Optimization
+}
+```

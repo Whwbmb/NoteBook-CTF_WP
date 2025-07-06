@@ -136,3 +136,66 @@ for (char ch : s) { … }           // range-for
 | `std::wstring`                                            | 平台相关宽字符（Windows UTF-16） |
 
 ---
+
+
+`字符串反转：`
+```cpp
+#include <algorithm>
+#include <iterator>
+class Solution {
+public:
+    /**
+     * 代码中的类名、方法名、参数名已经指定，请勿修改，直接返回方法规定的值即可
+     *
+     * 
+     * @param s string字符串 
+     * @param n int整型 
+     * @return string字符串
+     */
+    string trans(string s, int n) {
+        // write code here
+        if(n==0)return s;
+        for(int i=0;i<n;i++){
+            if(s[i]>='a'&&s[i]<='z')s[i]+='A'-'a';
+            else if(s[i]>='A'&&s[i]<='Z')s[i]+='a'-'A';
+            
+        }
+        reverse(s.begin(), s.end());
+        for(int i=0;i<n;i++){
+            int j=i;
+            while(1){
+                if(s[j]!=' '&&j<n)j++;
+                else break;
+            }
+            reverse(s.begin()+i,s.begin()+j);
+            i=j;
+        }
+        return s;
+    }
+};
+```
+**求字符串数组的最大公共前缀：**
+```cpp
+class Solution {
+public:
+    string longestCommonPrefix(vector<string>& strs) {
+        int n = strs.size();
+        //空字符串数组
+        if(n == 0) 
+            return "";
+        //遍历第一个字符串的长度
+        for(int i = 0; i < strs[0].length(); i++){ 
+            char temp = strs[0][i]; 
+            //遍历后续的字符串
+            for(int j = 1; j < n; j++) 
+                //比较每个字符串该位置是否和第一个相同
+                if(i == strs[j].length() || strs[j][i] != temp) 
+                    //不相同则结束
+                    return strs[0].substr(0, i); 
+        }
+        //后续字符串有整个字一个字符串的前缀
+        return strs[0]; 
+    }
+};
+```
+
